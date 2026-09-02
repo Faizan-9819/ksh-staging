@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 1557 913" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="Brand Element" opacity="0.7" d="M0.710434 16.5593V718.098C0.710434 718.098 -13.6636 912.5 195.184 912.5C404.032 912.5 389.658 718.098 389.658 718.098M389.869 718.098V196.593C389.869 196.593 375.495 2.19045 584.343 2.19045C793.191 2.19045 778.817 196.593 778.817 196.593L778.183 716.407C778.183 716.407 763.809 910.81 972.657 910.81C1181.51 910.81 1167.34 716.407 1167.34 716.407V194.902C1167.34 194.902 1152.97 0.5 1361.82 0.5C1570.66 0.5 1556.29 194.902 1556.29 194.902" stroke="url(#paint0_linear_0_5)" stroke-opacity="0.2"/>
+<defs>
+<linearGradient id="paint0_linear_0_5" x1="778.5" y1="0.5" x2="778.5" y2="912.5" gradientUnits="userSpaceOnUse">
+<stop stop-color="#24314E" stop-opacity="0.2"/>
+<stop offset="1" stop-color="#24314E" stop-opacity="0.7"/>
+</linearGradient>
+</defs>
+</svg>
