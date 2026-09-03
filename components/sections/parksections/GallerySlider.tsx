@@ -40,11 +40,18 @@ const videosToSlides = (videos: { label: string; vid: string }[]): Slide[] =>
  * Clicking a slide opens the same shared GalleryMediaPopup used by
  * ConcavePanoramaSlider on desktop.
  */
-export default function GallerySlider({ content }: { content: GalleryContent }) {
+export default function GallerySlider({
+  content,
+}: {
+  content: GalleryContent;
+}) {
   const TABS: TabConfig[] = [
     { label: content.photosLabel, slides: imagesToSlides(content.photoImages) },
     { label: content.videosLabel, slides: videosToSlides(content.videos) },
-    { label: content.rendersLabel, slides: imagesToSlides(content.renderImages) },
+    {
+      label: content.rendersLabel,
+      slides: imagesToSlides(content.renderImages),
+    },
   ].filter((tab) => tab.slides.length > 0);
 
   const [activeTab, setActiveTab] = useState(0);
@@ -75,7 +82,7 @@ export default function GallerySlider({ content }: { content: GalleryContent }) 
     <div className="relative w-full bg-[#f9f7f2] py-12 flex flex-col md:hidden">
       <div className="flex flex-col fix items-start gap-[20px] pb-10">
         {/* Eyebrow */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="text-[#59624d] font-mono text-sm tracking-widest uppercase">
             //
           </span>
@@ -83,7 +90,7 @@ export default function GallerySlider({ content }: { content: GalleryContent }) 
             className="font-sora font-normal text-xs tracking-[-0.02em] uppercase text-[#59624d] m-0"
             dangerouslySetInnerHTML={{ __html: content.eyebrow }}
           />
-        </div>
+        </div> */}
 
         <h2
           className="font-sora font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight tracking-tight text-[#212121] text-left"
@@ -112,7 +119,9 @@ export default function GallerySlider({ content }: { content: GalleryContent }) 
         <div className="relative w-full aspect-video overflow-hidden">
           <div
             className="flex w-full h-full transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(calc(-${activeSlide * 100}% - ${activeSlide * 16}px))` }}
+            style={{
+              transform: `translateX(calc(-${activeSlide * 100}% - ${activeSlide * 16}px))`,
+            }}
           >
             {slides.map((slide, idx) => (
               <div

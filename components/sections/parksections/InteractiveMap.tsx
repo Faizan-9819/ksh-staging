@@ -361,13 +361,25 @@ export default function InteractiveMapSection({
         </div>
       </div>
 
-      {/* Map Area Container */}
+      {/* Map Area Container — visible box height stays exactly as before.
+          The <Map> inside is made 100px TALLER than its container (see
+          style below) so the extra 100px of map — where Google's mandatory
+          attribution strip always renders, pinned to the map canvas's own
+          bottom edge, no API to remove it — overflows past the container's
+          bottom and gets clipped by this div's own overflow-hidden, instead
+          of growing the visible section or affecting page layout at all. */}
       <div className="relative w-full h-[500px] lg:h-[700px] overflow-hidden bg-[#F9F2D8] **:focus:outline-none **:focus-visible:outline-none">
         <APIProvider apiKey={apiKey}>
           <Map
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "calc(100% + 100px)" }}
             defaultCenter={{ lat: destLat, lng: destLng }}
             defaultZoom={9}
+            // No maxZoom — zooming in stays unrestricted. minZoom stops the
+            // user from zooming out to a near-country-level view; the map
+            // already auto-fits around routes up to ~143km (Mumbai
+            // International Airport), so this still allows a bit more
+            // zoom-out room below that widest fitBounds level.
+            minZoom={7}
             styles={ROUTE_MAP_STYLE}
             disableDefaultUI
             rotateControl={false}
@@ -394,7 +406,10 @@ export default function InteractiveMapSection({
           </Map>
         </APIProvider>
 
-        {/* Bottom Right "View on Map" Pill Badge */}
+        {/* Bottom Right "View on Map" Pill Badge — unchanged; the
+            container it's positioned relative to never grew, only the
+            <Map> canvas inside it did (see comment above), so this stays
+            at its original position. */}
         <div className="absolute bottom-4 right-4 z-10">
           <a
             href={activeLocation.googleMapUrl}

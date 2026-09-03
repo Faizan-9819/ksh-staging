@@ -49,12 +49,24 @@ export default function ConnectMap({
   const [lat, lng] = location.coords;
 
   return (
-    <div className="relative w-full h-full **:focus:outline-none **:focus-visible:outline-none">
+    // overflow-hidden added so the <Map>'s extra +100px of height (below)
+    // clips instead of pushing this container's own box taller — the
+    // parent controls this div's actual height via h-full, so nothing here
+    // grows visibly.
+    <div className="relative w-full h-full overflow-hidden **:focus:outline-none **:focus-visible:outline-none">
       <APIProvider apiKey={apiKey}>
         <Map
-          style={{ width: "100%", height: "100%" }}
+          // Google's mandatory attribution strip always renders pinned to
+          // the map canvas's own bottom edge (no API to remove it) — making
+          // the map 100px taller than its container and letting
+          // overflow-hidden clip the overflow pushes that strip out of the
+          // visible area without changing this component's own footprint.
+          style={{ width: "100%", height: "calc(100% + 100px)" }}
           defaultCenter={{ lat, lng }}
           defaultZoom={15}
+          // No maxZoom — zooming in stays unrestricted. minZoom stops
+          // zooming out past a wide-city view.
+          minZoom={11}
           styles={CONNECT_MAP_STYLE}
           disableDefaultUI
           rotateControl={false}

@@ -109,13 +109,23 @@ export default function ConnectWithUsSection() {
         {/* Divider Line */}
         <div className="w-full h-[1px] bg-[#E5E0D8]" />
 
-        {/* Interactive Themed Map Container */}
+        {/* Interactive Themed Map Container — visible box (border, rounding,
+            shadow, height) stays exactly as before. The <Map> inside is
+            made 100px TALLER than its container and top-aligned via the
+            wrapper below, so the extra 100px of map — where Google's
+            mandatory attribution strip always renders, pinned to the map
+            canvas's own bottom edge, no API to remove it — overflows past
+            the container's bottom and gets clipped by this div's own
+            overflow-hidden, instead of growing the visible card. */}
         <div className="relative w-full rounded-2xl overflow-hidden border border-[#E5E0D8] h-[320px] sm:h-[400px] md:h-[450px] lg:h-[500px] shadow-sm bg-[#FBF2E8] **:focus:outline-none **:focus-visible:outline-none">
           <APIProvider apiKey={apiKey}>
             <Map
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "calc(100% + 100px)" }}
               defaultCenter={MAP_LOCATIONS.mumbai.coords}
               defaultZoom={14}
+              // No maxZoom — zooming in stays unrestricted. minZoom stops
+              // zooming out past a wide-city view.
+              minZoom={10}
               styles={TEAL_WATER_MAP_STYLE}
               disableDefaultUI
               rotateControl={false}

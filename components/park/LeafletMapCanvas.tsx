@@ -53,9 +53,19 @@ export default function LeafletMapCanvas() {
   return (
     <APIProvider apiKey={apiKey}>
       <Map
-        style={{ width: "100%", height: "100%" }}
+        // Google's mandatory attribution strip always renders pinned to the
+        // map canvas's own bottom edge (no API to remove it) — making the
+        // map 100px taller than its container and relying on the parent's
+        // (ParkLeafletMap.tsx) fixed height + overflow-hidden to clip the
+        // overflow pushes that strip below the visible area without
+        // affecting this component's own footprint.
+        style={{ width: "100%", height: "calc(100% + 100px)" }}
         defaultCenter={PARK_POSITION}
         defaultZoom={11}
+        // No maxZoom — zooming in stays unrestricted. minZoom stops zooming
+        // out past a wide-region view (scroll-zoom is already off on this
+        // decorative map, but pinch/double-click zoom can still reach this).
+        minZoom={8}
         styles={PARK_MAP_STYLE}
         disableDefaultUI
         // Matches the original MapLibre config: scroll-to-zoom and rotate
