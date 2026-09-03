@@ -91,7 +91,7 @@ export default function GallerySlider({
             dangerouslySetInnerHTML={{ __html: content.eyebrow }}
           />
         </div> */}
-
+        {/*  */}
         <h2
           className="font-sora font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight tracking-tight text-[#212121] text-left"
           dangerouslySetInnerHTML={{ __html: content.heading }}
