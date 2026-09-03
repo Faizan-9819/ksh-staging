@@ -65,6 +65,10 @@ export default function LeafletMapCanvas() {
         gestureHandling="greedy"
         scrollwheel={false}
         rotateControl={false}
+        // Keyboard shortcuts make the map div focusable, which produces a
+        // visible browser focus-ring outline on click/interact — the
+        // original MapLibre map never had keyboard panning either.
+        keyboardShortcuts={false}
       >
         <ParkMarker />
       </Map>

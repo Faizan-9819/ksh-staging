@@ -1,7 +1,43 @@
 # KSH INFRA — Vercel Cost & Performance Optimization Plan
 
-Written 2026-09-02, ahead of migrating this Next.js 16 app (currently running on a
-Cloudways VPS via PM2, see `ecosystem.config.js` / `cloudways.txt`) to Vercel.
+Written 2026-09-02, ahead of migrating this Next.js 16 app (previously running on a
+Cloudways VPS via PM2) to Vercel. Updated same day after real traffic numbers were
+confirmed and a first cleanup pass landed — see the REQUIRED/NOT REQUIRED table
+below before reading anything else in this file.
+
+## Confirmed traffic: 72,000 visits/year (~197/day) — READ THIS FIRST
+
+Real bandwidth math against this site's actual measured page weight (worst case:
+every visit a first-time desktop visitor hitting the video-heavy homepage) puts
+72,000 visits/year at roughly **4.6TB/year ≈ 384GB/month** — comfortably under
+Vercel Pro's 1TB/month included Fast Data Transfer, with real margin to spare even
+in the worst case. **At this traffic level, this site stays at the flat $20/month
+with zero further work.** That changes which sections below are load-bearing
+(actually required to hit $20/mo) versus nice-to-have (speed/margin for future
+growth, not needed to hit the budget today).
+
+| # | Item | Status | Required at 72K/yr? |
+|---|---|---|---|
+| — | Remove unused videos/scripts/PM2 config from repo | **Done** (this session) | — |
+| — | Reorganize homepage assets into `public/homeasset/`, fix all paths | **Done** (this session) | — |
+| 1 | Move media (video/PDF) off Vercel to R2/CDN | Not done — still 100% on Vercel | **Not required** at this volume. Worth doing later for margin/speed as traffic grows past ~250K-500K/yr, not urgent now. |
+| 2 | Remove/verify the `wp-image` Node proxy | Not done — proxy still active | Not required for the $20 cap at this volume (low Function-invocation cost at ~200 visits/day), but cheap to do and removes needless latency — do when convenient. |
+| 3 | Lean WordPress `_embed` fetches | Not done | Not required at this volume — do opportunistically if touching `lib/wordpress.ts` anyway. |
+| 4 | Verify no page renders dynamically | Not verified since migration | **Do this** — it's a free build-output check, catches a real cost/speed bug if one exists, costs nothing either way. |
+| 5 | `next.config.ts` cache headers | Already correct, verify on deploy | Verify only, no code change needed. |
+| 6 | Trim `next/image` device/image sizes | Not done — still Next defaults | Not required at this volume (nowhere near the ~10,000-transformation included allowance at ~200 visits/day), do later for margin. |
+| 7 | Reduce client-bundle weight (duplicate carousel libs) | Not done — both `swiper` and `embla-carousel-react` still present | Not a cost item on Vercel at all (bundle size isn't billed) — a speed/maintenance cleanup only, do whenever convenient. |
+| 8 | Bot/abuse rate limiting | Not done | **Do this before going live** regardless of traffic volume — a burst like the old Cloudways incident is a real risk independent of average daily traffic. |
+| 9 | PM2/Cloudways deploy config | **Done** — `ecosystem.config.js`, `scripts/pm2-deploy.sh`, `.htaccess`, and the `postbuild` script are all already removed from this repo | — |
+| 10 | Vercel spend guardrails | Not done — dashboard setting, no code | **Do this regardless of traffic** — it's the only thing that turns "should stay at $20" into "guaranteed to stay at $20" if traffic ever spikes unexpectedly (bot burst, viral post, etc.). Zero engineering cost. |
+| 11 | Blog/news revalidate window → 120s | Not done — still 900s/60s | Not urgent at this volume, but cheap and safe to do whenever — doesn't affect cost either way at ~200 visits/day. |
+
+**Bottom line at 72,000/yr: only two things are actually load-bearing for the $20
+cap — Section 8 (bot/rate-limit protection) and Section 10 (Vercel spend cap),
+because both protect against a *traffic spike*, not steady-state volume, and a
+spike is the one scenario that could blow past $20 even at low average traffic.**
+Everything else in this document is legitimate but optional polish at this
+specific scale — valuable once traffic grows, not needed to hit the budget today.
 
 ## Ground rule for whoever implements this
 
@@ -58,29 +94,40 @@ project could blow through its included Pro-plan allowance:
    combination `next/image` generates on first request, once the ~10,000-image
    included allowance is exceeded.
 
-This repo currently has **`public/` at 785MB**, of which:
-- **~345MB is video** (32 files; `Hero_Section2.mp4` alone is 37MB, and there are 4
-  separate hero video variants totaling ~130MB just for the homepage hero across
-  desktop/mobile × 2 slides)
+This repo currently has **`public/` at 618MB** (down from an initial 785MB after
+this session's cleanup removed 18 confirmed-unused video files and other dead
+weight — see the "Done this session" table entries above), of which:
+- **~179MB is video** — the homepage hero alone loads 2 files on desktop
+  (`public/homeasset/Hero_Section.mp4` at 27.1MB + `Hero_Section2.mp4` at 35.7MB,
+  ≈63MB combined per desktop visit before the frame sequence below even starts),
+  plus the mobile hero video and every park page's hero video
 - **~143MB is PDFs** (brochures + ESG reports, `KSH_ESG_Report_2023.pdf` is 54MB)
-- **37MB / 218 files** is a single scroll-scrubbed frame sequence
-  (`public/home/frames2/frame_*.webp`, driven by `components/sections/Hero.tsx`
-  formerly `ScrollFrames.tsx`)
+- **218 files (~37MB)** is a scroll-scrubbed frame sequence, now at
+  `public/homeasset/frames2/frame_*.webp`, driven by `components/sections/Hero.tsx`
+  and `components/sections/ScrollFrames.tsx`
 
 None of this is a coding mistake — the current implementation is already carefully
 tuned for perceived performance (viewport-conditional video sources,
 `fetchPriority`, `requestIdleCallback`-deferred frame preloading, stripped
 WordPress lazy-loading). The problem is purely that **large static media served
-directly from Vercel's CDN is the single most expensive thing you can host there**,
-and this site serves a lot of it, on high-traffic marketing pages, including ones a
-single bad actor or bot can hammer (see the August 24 2026 Cloudways CPU-spike
-incident in `cloudways.txt` — 3,345 requests from one IP in ~3 seconds, hitting
-`/`, `/about-ksh`, `/parks`, etc.). On Vercel that same burst would be a bandwidth
-and Function-invocation bill, not just a CPU spike.
+directly from Vercel's CDN is the single most expensive thing you can host there**
+— though at this site's confirmed 72,000 visits/year, the math above shows this
+isn't yet an active cost problem, just a future one if traffic grows. A single bad
+actor or bot burst is a separate, live risk regardless of average traffic (see the
+August 24 2026 Cloudways CPU-spike incident in `cloudways.txt` — 3,345 requests
+from one IP in ~3 seconds, hitting `/`, `/about-ksh`, `/parks`, etc. — which is why
+Section 8/10 below are the two genuinely required items, not the media-size
+sections).
 
 ---
 
-## 1. Move large media off Vercel's own bandwidth meter (biggest lever)
+## 1. Move large media off Vercel's own bandwidth meter (NOT required at 72K/yr — future-proofing only)
+
+**Status: not required to hit $20/month at this site's confirmed 72,000
+visits/year — see the table at the top of this document.** This section is kept
+for when traffic grows; skip it for now unless you specifically want the
+future-proofing done early or want R2's global CDN speed benefit regardless of
+cost. Do not treat this as blocking or urgent at current traffic.
 
 **Where:** everything under `public/` referenced by `<video>` tags in:
 `components/sections/Hero.tsx`, `components/sections/parksections/VideoHeroSection.tsx`,
@@ -111,8 +158,8 @@ and Function-invocation bill, not just a CPU spike.
   it must survive the URL swap unchanged.
 - For the `frame_*.webp` sequence in `ScrollFrames`/`Hero.tsx`: same move to
   CDN/R2, same eager `img.fetchPriority = "low"` + `requestIdleCallback` prefetch
-  logic kept intact — only the base URL changes from `/home/frames2/frame_...` to
-  the CDN path.
+  logic kept intact — only the base URL changes from `/homeasset/frames2/frame_...`
+  (its current location, already reorganized this session) to the CDN path.
 - Leave small, above-the-fold images (logos, icons, small hero stills) in `public/`
   — they're cheap and benefit from being same-origin with no extra DNS/TLS
   handshake. This move is specifically for the large video/PDF/sequence assets.
@@ -125,7 +172,12 @@ every other optimization in this document combined.
 
 ---
 
-## 2. Eliminate the Node Function image proxy for WordPress media
+## 2. Eliminate the Node Function image proxy for WordPress media (not required at 72K/yr — do when convenient)
+
+**Status: not urgent.** At ~200 visits/day this proxy's Function-invocation cost is
+small and won't threaten the $20 cap. Worth doing eventually since it removes a
+real latency hop and is basically free to implement once verified safe on Vercel
+— but it's cleanup, not a budget requirement right now.
 
 **Where:** `app/api/wp-image/route.ts`, called from `lib/wordpress.ts`'s
 `toProxiedImageUrl()`.
@@ -160,7 +212,11 @@ server specifically** (SSRF guard in `next/image`) — see the comment block in
 
 ---
 
-## 3. Convert the WordPress `_embed` blog fetches from bandwidth-heavy to lean
+## 3. Convert the WordPress `_embed` blog fetches from bandwidth-heavy to lean (not required at 72K/yr)
+
+**Status: not urgent.** Do opportunistically if you're already editing
+`lib/wordpress.ts` for another reason — not worth a dedicated pass at current
+traffic.
 
 **Where:** `lib/wordpress.ts` — `fetchAllPosts()`, `fetchPostsPage()`,
 `fetchPostsByCategories()`.
@@ -184,7 +240,11 @@ server specifically** (SSRF guard in `next/image`) — see the comment block in
 
 ---
 
-## 4. Confirm every marketing page is statically generated, not dynamically rendered
+## 4. Confirm every marketing page is statically generated, not dynamically rendered — DO THIS
+
+**Status: required, and free.** This is a build-output check, not a code change —
+costs nothing to run and catches a real hidden-Function-cost bug if one exists,
+regardless of traffic volume. Do this once as part of the actual Vercel cutover.
 
 **Where:** every route under `app/(site)/*` — `about-ksh`, `parks`, `solutions`,
 `sustainability`, `testimonials`, `case-studies`, `careers`, `contact-us`,
@@ -233,7 +293,12 @@ server specifically** (SSRF guard in `next/image`) — see the comment block in
 
 ---
 
-## 6. Audit `next/image` usage for Image Optimization transformation cost
+## 6. Audit `next/image` usage for Image Optimization transformation cost (not required at 72K/yr)
+
+**Status: not urgent.** At ~200 visits/day this site is nowhere near Vercel's
+~10,000-transformation included allowance even with `next/image` left at default
+`deviceSizes`/`imageSizes`. Worth trimming for margin once traffic grows, not a
+current requirement.
 
 **Where:** 29 files already use `next/image` (good); 14 files use raw `<img>` tags
 — find them with `grep -rl "<img " app components --include="*.tsx"` — and decide
@@ -267,7 +332,12 @@ anyway) or should be converted.
 
 ---
 
-## 7. Reduce client-bundle weight from heavy libraries (indirect cost + real speed)
+## 7. Reduce client-bundle weight from heavy libraries (not a cost item — speed/hygiene only)
+
+**Status: never a Vercel cost item** — Vercel doesn't meter JS bundle size at all,
+so this section has zero relationship to the $20 cap at any traffic level. Do this
+purely for page-load speed and codebase hygiene, whenever convenient — not part
+of the cost-control plan.
 
 **Where:** `package.json` dependencies — `framer-motion`, `@vis.gl/react-google-maps`,
 `swiper`, `embla-carousel-react`, `lenis`.
@@ -304,7 +374,13 @@ anyway) or should be converted.
 
 ---
 
-## 8. Bot/abuse protection to prevent a repeat of the August 24 CPU-spike incident
+## 8. Bot/abuse protection to prevent a repeat of the August 24 CPU-spike incident — DO THIS
+
+**Status: required, regardless of traffic volume.** This is one of only two
+sections in this document that's actually load-bearing for the $20 cap at
+72,000 visits/year — steady low traffic doesn't threaten the budget, but a burst
+(bot, scraper, or a repeat of the August 24 incident) can spike bandwidth/Function
+costs in minutes independent of the yearly average. Do this before going live.
 
 **Where:** new addition — Vercel project settings + optionally `proxy.ts`
 (currently only handles the `kshinfra.com` → `www.kshinfra.com` redirect).
@@ -329,32 +405,29 @@ anyway) or should be converted.
 
 ---
 
-## 9. PM2-specific config to retire once on Vercel
+## 9. PM2-specific config — DONE, no action needed
 
-**Where:** `ecosystem.config.js`, `scripts/pm2-deploy.sh` (referenced by
-`package.json`'s `postbuild` script), `.htaccess`.
+**Status: complete.** `ecosystem.config.js`, `scripts/pm2-deploy.sh`, `.htaccess`,
+and the `"postbuild": "bash scripts/pm2-deploy.sh"` line in `package.json` have all
+already been removed from this repo. `package.json`'s scripts are now just `dev`,
+`build`, `start`, `lint` — nothing PM2/Cloudways-specific remains that could break
+a Vercel build.
 
-**What to do:**
-- These exist entirely to manage a single long-running Node process on a 2GB
-  Cloudways VPS (memory ceiling, restart-on-crash, log rotation — see the detailed
-  comments in `ecosystem.config.js` explaining the 700MB `max_memory_restart` and
-  `--max-old-space-size=600` choices). None of this applies on Vercel, which runs
-  each Function invocation in its own short-lived instance with no persistent
-  process to leak memory or need PM2-managed restarts.
-- Remove the `postbuild` script from `package.json` (`"postbuild": "bash
-  scripts/pm2-deploy.sh"`) — Vercel's build pipeline doesn't expect or need a
-  deploy script to run as part of `next build`, and leaving it in risks the build
-  failing on Vercel's build image if the script assumes a Cloudways-specific
-  filesystem layout or `pm2` binary.
-- `.htaccess` (Apache config) has no effect on Vercel at all — safe to leave in the
-  repo for reference or delete once the Cloudways deployment is fully retired, but
-  confirm nothing else still depends on it first.
-- `proxy.ts`'s `kshinfra.com` → `www.kshinfra.com` redirect is platform-agnostic
-  (Next.js proxy runs the same way on Vercel) — keep as-is, no change needed.
+`proxy.ts`'s `kshinfra.com` → `www.kshinfra.com` redirect is platform-agnostic
+(Next.js proxy runs the same way on Vercel) — left as-is, no change was needed
+there.
+
+No further action required for this section.
 
 ---
 
-## 10. Set up spend guardrails on the Pro plan before going live
+## 10. Set up spend guardrails on the Pro plan before going live — DO THIS
+
+**Status: required, regardless of traffic volume.** This is the other one of the
+two genuinely load-bearing sections for the $20 cap — it's the only thing that
+turns "traffic math says we should stay at $20" into "guaranteed to never exceed
+$20," covering the case a burst/spike gets past Section 8's rate limiting too.
+Zero engineering cost, dashboard-only, do this before or during cutover.
 
 **Where:** Vercel dashboard → project/team Billing settings (no code change).
 
@@ -380,7 +453,13 @@ anyway) or should be converted.
 
 ---
 
-## 11. Caching strategy: serve every page from cache, not from a Function
+## 11. Caching strategy: serve every page from cache, not from a Function (not required for the $20 cap at 72K/yr — worth doing for speed)
+
+**Status: not a budget requirement at current traffic** (static/ISR pages already
+cost nothing per-visit regardless of the 900s/60s vs 120s revalidate window at
+~200 visits/day), **but the revalidate-window change is cheap, safe, and worth
+doing anyway** since it makes blog/news content feel more current — do it
+whenever convenient, not urgently.
 
 This is the single biggest lever for **both** cost and PageSpeed at once — a
 request served from Vercel's CDN cache never invokes a Function (zero
@@ -492,31 +571,38 @@ prerequisites, alongside Sections 1, 6, and 7, rather than the single fix.
 
 ---
 
-## Summary — priority order for actual cost impact
+## Summary — what to actually do, given confirmed 72,000 visits/year
 
-1. **Move video/PDF/frame-sequence assets off `public/` to R2 or equivalent
-   egress-free storage** (Section 1) — by far the largest lever; this project's
-   `public/` directory is 785MB and dominated by media that gets served
-   full-weight on every relevant page view.
-2. **Delete or edge-cache the `wp-image` Node Function proxy** (Section 2) — turns
-   a per-image-byte Function cost into free CDN-static or Image-Optimization cost.
-3. **Verify no page accidentally renders dynamically** (Section 4) — a build-output
-   check, costs nothing to do, catches any hidden per-visit Function cost.
-4. **Trim `next/image` device/image size arrays** (Section 6) — smaller lever, but
-   free to do and reduces Image Optimization transformation count.
-5. **Keep every page static/ISR and drop blog/news revalidate to 120s** (Section
-   11) — this is what actually gets requests served from cache instead of
-   invoking a Function; it's the direct mechanism behind both the cost savings
-   and the TTFB half of a PageSpeed score. Not "cache everything forever" —
-   matched to a 2-minute content-freshness requirement, no shorter.
-6. **Set up Spend Management + usage alerts before cutover** (Section 10) — zero
-   engineering cost, and the only thing standing between "a bad week" and "a bad
-   invoice" on a fixed $20/mo plan with metered overages.
-7. Sections 3, 5, 7, 8, 9 are correctness/hygiene/defense-in-depth — worth doing,
-   lower cost impact individually.
+**Required before going live (protects the $20 cap against a traffic spike,
+independent of steady-state volume):**
+1. **Section 8 — bot/abuse rate limiting.** A burst (bot, scraper, repeat of the
+   August 24 incident) can spike cost in minutes regardless of the yearly average.
+2. **Section 10 — Vercel Spend Management, with the pause-on-limit option
+   explicitly enabled** (not just notifications — see the discussion earlier in
+   this conversation about that default trap). This is the only true hard
+   guarantee against exceeding $20.
+3. **Section 4 — verify no page renders dynamically.** Free, one-time build-output
+   check, catches a real hidden-cost bug if one exists.
 
-Every recommendation above preserves current eager-loading behavior for images and
-videos. Nothing here should make any page feel slower — several items (moving
-video off Vercel's own bandwidth-constrained serving path to a CDN built for large
-media, eliminating a Function-proxy hop for images) should make pages *feel
-faster* in addition to costing less.
+**Already done this session — no action needed:**
+- Section 9 — PM2/Cloudways deploy config fully removed.
+- 18 unused video files (166.7MB) + debug scripts/screenshots/notes + duplicate
+  SVGs moved to `_unused_backup/` (git-ignored, recoverable).
+- Homepage assets reorganized into `public/homeasset/`, all references fixed.
+
+**Not required to hit $20/month at 72,000 visits/year — genuinely optional at
+this traffic level, worth revisiting once traffic grows meaningfully (roughly
+past 250K-500K visits/year, where Vercel's 1TB bandwidth allowance starts being
+a real constraint):**
+- Section 1 — moving media to R2/CDN
+- Section 2 — removing the `wp-image` Node proxy
+- Section 3 — leaner WordPress `_embed` queries
+- Section 6 — trimming `next/image` device/size arrays
+- Section 11 — dropping blog/news revalidate to 120s (safe and cheap to do
+  anyway, just not cost-driven at this volume)
+
+**Never a cost item on Vercel at any traffic level, pure speed/hygiene:**
+- Section 7 — client bundle size (Vercel doesn't meter JS bundle size)
+
+Every recommendation in this document preserves current eager-loading behavior
+for images and videos — nothing here should make any page feel slower.

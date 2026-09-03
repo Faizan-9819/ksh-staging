@@ -255,7 +255,7 @@
 
 //                     {/* Right Arrow Button */}
 //                     <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:rotate-0">
-//                       <img src="/leftup.png" alt="" />
+//                       <img src="/homeasset/leftup.png" alt="" />
 //                     </div>
 //                   </div>
 //                 </div>
@@ -322,43 +322,43 @@
 // const POSTS = [
 //   {
 //     title: "Industrial Park Common-Area Amenities: What Tenants Actually Use",
-//     img: "/home/insights/insights1.webp",
+//     img: "/homeasset/insights1.webp",
 //     date: "23 MAR 2022",
 //   },
 //   {
 //     title:
 //       "The Hosur-Chennai Industrial Corridor: How Infrastructure Developers Are Shaping South India’s Supply Chain Future",
-//     img: "/home/insights/insights2.webp",
+//     img: "/homeasset/insights2.webp",
 //     date: "17 APR 2022",
 //   },
 //   {
 //     title:
 //       "Navigating Risks in India’s Industrial Landscapes: The KSH INFRA Blueprint for Resilient Industrial Parks",
-//     img: "/home/insights/insights3.webp",
+//     img: "/homeasset/insights3.webp",
 //     date: "05 MAY 2022",
 //   },
 //   {
 //     title:
 //       "Tamil Nadu’s Infrastructure Boom Meets Industrial Real Estate: The Rise of Integrated Industrial & Logistics Ecosystems",
-//     img: "/home/insights/insights4.webp",
+//     img: "/homeasset/insights4.webp",
 //     date: "12 JUN 2022",
 //   },
 //   {
 //     title:
 //       "Hosur's Industrial Surge: Why Infrastructure Developers Are Powering the Next Manufacturing Hub",
-//     img: "/home/insights/insights5.webp",
+//     img: "/homeasset/insights5.webp",
 //     date: "28 JUL 2022",
 //   },
 //   {
 //     title:
 //       "The Next Wave of Growth: Why Grade A Industrial Parks are the Future for MSMEs in Hosur and Tamil Nadu",
-//     img: "/home/insights/insights6.webp",
+//     img: "/homeasset/insights6.webp",
 //     date: "03 SEP 2022",
 //   },
 //   {
 //     title:
 //       "Fueling the Future: How Industrial Parks are the Backbone of India’s Make-in-India Mission",
-//     img: "/home/insights/insights7.webp",
+//     img: "/homeasset/insights7.webp",
 //     date: "19 OCT 2022",
 //   },
 // ];
@@ -437,7 +437,7 @@
 //                         on ? "opacity-100" : "opacity-0"
 //                       }`}
 //                     >
-//                       <img src="/leftup.png" alt="" />
+//                       <img src="/homeasset/leftup.png" alt="" />
 //                     </div>
 //                   </div>
 //                 </div>
@@ -512,43 +512,43 @@ export interface InsightPost {
 const DEFAULT_POSTS: InsightPost[] = [
   {
     title: "Industrial Park Common-Area Amenities: What Tenants Actually Use",
-    img: "/home/insights/insights1.webp",
+    img: "/homeasset/insights1.webp",
     date: "23 MAR 2022",
   },
   {
     title:
       "The Hosur-Chennai Industrial Corridor: How Infrastructure Developers Are Shaping South India’s Supply Chain Future",
-    img: "/home/insights/insights2.webp",
+    img: "/homeasset/insights2.webp",
     date: "17 APR 2022",
   },
   {
     title:
       "Navigating Risks in India’s Industrial Landscapes: The KSH INFRA Blueprint for Resilient Industrial Parks",
-    img: "/home/insights/insights3.webp",
+    img: "/homeasset/insights3.webp",
     date: "05 MAY 2022",
   },
   {
     title:
       "Tamil Nadu’s Infrastructure Boom Meets Industrial Real Estate: The Rise of Integrated Industrial & Logistics Ecosystems",
-    img: "/home/insights/insights4.webp",
+    img: "/homeasset/insights4.webp",
     date: "12 JUN 2022",
   },
   {
     title:
       "Hosur's Industrial Surge: Why Infrastructure Developers Are Powering the Next Manufacturing Hub",
-    img: "/home/insights/insights5.webp",
+    img: "/homeasset/insights5.webp",
     date: "28 JUL 2022",
   },
   {
     title:
       "The Next Wave of Growth: Why Grade A Industrial Parks are the Future for MSMEs in Hosur and Tamil Nadu",
-    img: "/home/insights/insights6.webp",
+    img: "/homeasset/insights6.webp",
     date: "03 SEP 2022",
   },
   {
     title:
       "Fueling the Future: How Industrial Parks are the Backbone of India’s Make-in-India Mission",
-    img: "/home/insights/insights7.webp",
+    img: "/homeasset/insights7.webp",
     date: "19 OCT 2022",
   },
 ];
@@ -647,7 +647,7 @@ export default function Insights({
                         on ? "opacity-100" : "opacity-0"
                       }`}
                     >
-                      <img src="/leftup.png" alt="" />
+                      <img src="/homeasset/leftup.png" alt="" />
                     </div>
                   </div>
                 </>

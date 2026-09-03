@@ -30,17 +30,17 @@
 //   {
 //     title: "Environment",
 //     desc: "Designed to reduce environmental impact through energy-efficient infrastructure, resource conservation, and sustainable development practices.",
-//     icon: <SVG src="/home/Asset/leaf.svg" className="scale-130" />,
+//     icon: <SVG src="/homeasset/leaf.svg" className="scale-130" />,
 //   },
 //   {
 //     title: "Social",
 //     desc: "Creating safer workplaces, stronger communities, and better experiences for occupiers, employees, partners, and stakeholders.",
-//     icon: <SVG src="/home/Asset/people.svg" className="scale-130" />,
+//     icon: <SVG src="/homeasset/people.svg" className="scale-130" />,
 //   },
 //   {
 //     title: "Governance",
 //     desc: "Driven by transparency, accountability, and institutional-grade processes that support responsible long-term growth.",
-//     icon: <SVG src="/home/Asset/leaf.svg" className="scale-130" />,
+//     icon: <SVG src="/homeasset/leaf.svg" className="scale-130" />,
 //   },
 // ];
 
@@ -119,17 +119,17 @@
 
 //   const CARDS: CardItem[] = [
 //     {
-//       img: "/home/Asset/asset1.jpg",
+//       img: "/homeasset/asset1.jpg",
 //       label: "Industrial Parks",
 //       tag: "FLAGSHIP",
 //     },
 //     {
-//       img: "/home/Asset/asset2.jpg",
+//       img: "/homeasset/asset2.jpg",
 //       label: "Logistics Hubs",
 //       tag: "OPERATIONS",
 //     },
 //     {
-//       img: "/home/governance.jpg",
+//       img: "/homeasset/governance.jpg",
 //       label: "Grade A Warehouses",
 //       tag: "PREMIUM",
 //     },
@@ -440,17 +440,17 @@ const FEATURES: FeatureItem[] = [
   {
     title: "Environment",
     desc: "Designed to reduce environmental impact through energy-efficient Infrastructure, resource conservation, and sustainable development practices.",
-    icon: <SVG src="/home/Asset/leaf.svg" className="scale-130" />,
+    icon: <SVG src="/homeasset/leaf.svg" className="scale-130" />,
   },
   {
     title: "Social",
     desc: "Creating safer workplaces, stronger communities, and better experiences for occupiers, employees, partners, and stakeholders.",
-    icon: <SVG src="/home/Asset/people.svg" className="scale-130" />,
+    icon: <SVG src="/homeasset/people.svg" className="scale-130" />,
   },
   {
     title: "Governance",
     desc: "Driven by transparency, accountability, and institutional-grade processes that support responsible long-term growth.",
-    icon: <SVG src="/home/Asset/leaf.svg" className="scale-130" />,
+    icon: <SVG src="/homeasset/leaf.svg" className="scale-130" />,
   },
 ];
 
@@ -525,17 +525,17 @@ export default function AssetShowcase() {
 
   const CARDS: CardItem[] = [
     {
-      img: "/home/Asset/asset1.jpg",
+      img: "/homeasset/asset1.jpg",
       label: "Industrial Parks",
       tag: "FLAGSHIP",
     },
     {
-      img: "/home/Asset/asset2.jpg",
+      img: "/homeasset/asset2.jpg",
       label: "Logistics Hubs",
       tag: "OPERATIONS",
     },
     {
-      img: "/home/governance.jpg",
+      img: "/homeasset/governance.jpg",
       label: "Grade A Warehouses",
       tag: "PREMIUM",
     },

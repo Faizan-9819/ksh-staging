@@ -189,7 +189,7 @@
 //                 {/* Decorative Graphics (Hidden completely on mobile layouts) */}
 //                 <div className="hidden lg:flex items-end -ml-36 justify-end">
 //                   <img
-//                     src="/service.png"
+//                     src="/homeasset/service.png"
 //                     className="w-[100%] object-contain"
 //                     alt=""
 //                   />
@@ -521,7 +521,7 @@ export default function Services() {
                 {/* Decorative Graphics */}
                 <div className="hidden lg:flex items-end -ml-36 justify-end">
                   <img
-                    src="/service.png"
+                    src="/homeasset/service.png"
                     className="w-[100%] object-contain"
                     alt=""
                   />

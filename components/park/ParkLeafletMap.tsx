@@ -21,7 +21,7 @@ const GOOGLE_MAPS_URL =
 export default function ParkLeafletMap() {
   return (
     <section id="park-infrastructure" className="relative w-full bg-white overflow-hidden">
-      <div className="relative h-[500px] lg:h-[759px] w-full">
+      <div className="relative h-[500px] lg:h-[759px] w-full **:focus:outline-none **:focus-visible:outline-none">
         <LeafletMapCanvas />
 
         {/* Legibility scrim so the distance pills stay readable over map tiles */}

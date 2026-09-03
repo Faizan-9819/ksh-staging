@@ -1413,7 +1413,7 @@ export default function Map({
               scale: indiaScaleValue,
             }}
           >
-            <img src="/home/worldmap.webp" alt="" className="w-full h-auto" />
+            <img src="/homeasset/worldmap.webp" alt="" className="w-full h-auto" />
           </motion.div>
           <motion.div
             style={{
@@ -1423,7 +1423,7 @@ export default function Map({
             className="absolute z-[101] max-lg:hidden 1920:top-[63%] 1920:left-[44%] top-[67%] left-[43%] w-10 h-10"
           >
             <img
-              src="/home/map/mapcircle.svg"
+              src="/homeasset/mapcircle.svg"
               className="w-full h-full"
               alt=""
             />
@@ -1436,7 +1436,7 @@ export default function Map({
             className="absolute z-[101] max-lg:hidden 1920:top-[72%] 1920:left-[44.5%] top-[79%] left-[43.3%] w-10 h-10"
           >
             <img
-              src="/home/map/mapcircle.svg"
+              src="/homeasset/mapcircle.svg"
               className="w-full h-full"
               alt=""
             />
@@ -1449,7 +1449,7 @@ export default function Map({
             className="absolute z-[101] max-lg:hidden 1920:top-[79%] 1920:left-[47%] top-[88%] 2xl:top-[87%] left-[47%] 2xl:left-[47.5%] w-10 h-10"
           >
             <img
-              src="/home/map/mapcircle.svg"
+              src="/homeasset/mapcircle.svg"
               className="w-full h-full"
               alt=""
             />

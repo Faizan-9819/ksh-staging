@@ -397,9 +397,9 @@ const CTA_LABELS = [
 // only ever show these as the "next slide" preview thumbnail; slide 2 uses
 // its entry as the live background too).
 const imgs = [
-  "/home/hero/firstSlide.jpg",
-  "/home/hero/2ndslide.jpg",
-  "/home/hero/home3.jpg",
+  "/homeasset/firstSlide.jpg",
+  "/homeasset/2ndslide.jpg",
+  "/homeasset/home3.jpg",
 ];
 
 // Matches Tailwind's `lg` (1024px), same convention used throughout this
@@ -529,8 +529,8 @@ export default function Hero() {
                 key={isDesktopViewport ? "hero0-desktop" : "hero0-mobile"}
                 src={
                   isDesktopViewport
-                    ? "/home/hero/Hero_Section.mp4"
-                    : "/home/hero/home_sectionmob.mp4"
+                    ? "/homeasset/Hero_Section.mp4"
+                    : "/homeasset/home_sectionmob.mp4"
                 }
                 autoPlay
                 muted
@@ -557,8 +557,8 @@ export default function Hero() {
                 key={isDesktopViewport ? "hero1-desktop" : "hero1-mobile"}
                 src={
                   isDesktopViewport
-                    ? "/home/hero/Hero_Section2.mp4"
-                    : "/home/hero/home_sectionmob2.mp4"
+                    ? "/homeasset/Hero_Section2.mp4"
+                    : "/homeasset/home_sectionmob2.mp4"
                 }
                 autoPlay
                 muted
@@ -603,7 +603,7 @@ export default function Hero() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.6, ease: "easeInOut" }}
-                  src="/home/hero/homespot3.jpg"
+                  src="/homeasset/homespot3.jpg"
                   alt="KSH INFRA Industrial park aerial view"
                   className="lg:hidden absolute inset-0 w-full h-full object-cover pointer-events-none"
                 />

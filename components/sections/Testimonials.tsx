@@ -98,7 +98,7 @@
 //                 exit={{ opacity: 0, y: -6 }}
 //                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
 //               >
-//                 <img src="/quote.svg" className="mb-6" alt="" />
+//                 <img src="/homeasset/quote.svg" className="mb-6" alt="" />
 
 //                 {/* Fade Out Mask Container */}
 //                 <div className="relative lg:w-[80%] mt-0 mb-[clamp(24px,2.6vw,34px)]">
@@ -283,49 +283,49 @@ const DATA = [
     id: 1,
     name: "Mr. Amitabh Mathur",
     role: "Managing Director & CEO, GEDIA India Automotive Components Pvt. Ltd.",
-    img: "/home/testimonial/test2.jpg",
+    img: "/homeasset/test2.jpg",
     desc: "KSH INFRA delivered a world-class manufacturing facility with precision, speed, and transparency—proving to be not just a developer, but a trusted partner who exceeds expectations at every step.",
   },
   {
     id: 2,
     name: "Mr. Shyam Datye",
     role: "India Head, CTC Global",
-    img: "/home/testimonial/test4.jpg",
+    img: "/homeasset/test4.jpg",
     desc: "KSH INFRA is flexible when it comes to client needs and delivers excellent quality in every project.",
   },
   {
     id: 3,
     name: "Mr. Yogesh Barve",
     role: "Managing Director, Klingspor",
-    img: "/home/testimonial/test3.jpg",
+    img: "/homeasset/test3.jpg",
     desc: "KSH INFRA’s responsiveness, commitment to service and professionalism is exceptional.",
   },
   {
     id: 4,
     name: "Mr. Inder Aurora",
     role: "Director, Unisource",
-    img: "/home/testimonial/test5.jpg",
+    img: "/homeasset/test5.jpg",
     desc: "KSH INFRA’s exceptional quality of construction and professional, solution-oriented approach makes collaborating with them a great experience.",
   },
   {
     id: 5,
     name: "Naoki Matsumoto",
     role: "Chairman, India (Kawasaki)",
-    img: "/home/testimonial/test6.jpg",
+    img: "/homeasset/test6.jpg",
     desc: "Team KSH INFRA was extremely supportive and professional in developing the facility for us.",
   },
   {
     id: 6,
     name: "Todd Renner",
     role: "Global Business Unit Manager, Jabil",
-    img: "/home/testimonial/test1.jpg",
+    img: "/homeasset/test1.jpg",
     desc: "KSH INFRA has been very instrumental during our facility setup and with their expertise in construction and understanding of our manufacturing needs.",
   },
   {
     id: 7,
     name: "Raj Ghogale",
     role: "Managing Director, Callisons",
-    img: "/home/testimonial/test7.jpg",
+    img: "/homeasset/test7.jpg",
     desc: "KSH INFRA helped us set up a world class Industrial facility; the workers, Infrastructure and service provided by KSH INFRA is unparalleled.",
   },
 ];
@@ -385,7 +385,7 @@ export default function Testimonials() {
                 {DATA.map((item) => (
                   <div key={`ghost-${item.id}`} className="[grid-area:1/1]">
                     <img
-                      src="/quote.svg"
+                      src="/homeasset/quote.svg"
                       className="mb-4 w-16 lg:mb-6 lg:w-auto"
                       alt=""
                     />
@@ -415,7 +415,7 @@ export default function Testimonials() {
                     transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <img
-                      src="/quote.svg"
+                      src="/homeasset/quote.svg"
                       className="mb-4 w-16 lg:mb-6 lg:w-auto"
                       alt=""
                     />
@@ -682,7 +682,7 @@ export default function Testimonials() {
 //                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
 //               >
 //                 <img
-//                   src="/quote.svg"
+//                   src="/homeasset/quote.svg"
 //                   className="mb-4 w-9 lg:mb-6 lg:w-auto"
 //                   alt=""
 //                 />

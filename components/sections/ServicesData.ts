@@ -11,7 +11,7 @@ export interface ServiceItem {
 export const SERVICES: ServiceItem[] = [
   {
     name: "Land Acquisition",
-    src: "/services/service1.jpg",
+    src: "/homeasset/service1.jpg",
     markers: [
       { left: "36%", top: "60%" },
       { left: "79%", top: "54%" },
@@ -25,7 +25,7 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     name: "Capital Deployment",
-    src: "/services/service2.jpg",
+    src: "/homeasset/service2.jpg",
     markers: [],
     title: "Unlocking Development Capital",
     paras: [
@@ -35,7 +35,7 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     name: "Project Development",
-    src: "/services/service3.jpg",
+    src: "/homeasset/service3.jpg",
     markers: [],
     title: "Creating Grade A Assets",
     paras: [
@@ -45,7 +45,7 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     name: "Leasing Management",
-    src: "/services/service4.jpg",
+    src: "/homeasset/service4.jpg",
     markers: [],
     title: "Driving Occupancy & Growth",
     paras: [
@@ -55,7 +55,7 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     name: "Property Management",
-    src: "/services/service5.jpg",
+    src: "/homeasset/service5.jpg",
     markers: [],
     title: "Maximizing Asset Performance",
     paras: [

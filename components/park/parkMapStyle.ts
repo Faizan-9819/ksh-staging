@@ -6,42 +6,31 @@
 // stylers (no CSS filter equivalent applied to its own tiles), so each
 // filtered look below is recreated as its own explicit color palette rather
 // than a filter — same end colors, different mechanism.
+//
+// Production reference (confirmed against the live kshinfra.com site) is a
+// near-flat, almost single-tone map: water/rivers barely distinguishable from
+// land, no green park/landscape patches, and ZERO text labels of any kind —
+// no city names, no lake/river names, no road names. Every style below is
+// tuned to that: water and landscape/park geometry are blended close to the
+// base tone (subtle tonal shift only, not a distinct color), and every label
+// layer is turned off, full stop — not just POI/road labels but place names,
+// water names, and administrative names too.
+
+const NO_LABELS_AT_ALL: google.maps.MapTypeStyle[] = [
+  { elementType: "labels", stylers: [{ visibility: "off" }] },
+];
 
 // Deep tan/olive palette for the single-park hero map (previously the
 // MapLibre vector style in this file, rendered via LeafletMapCanvas.tsx).
 export const PARK_MAP_STYLE: google.maps.MapTypeStyle[] = [
   { elementType: "geometry", stylers: [{ color: "#FBF2E8" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#5c5a4e" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#FBF2E8" }] },
-  {
-    featureType: "administrative",
-    elementType: "geometry",
-    stylers: [{ visibility: "simplified" }],
-  },
-  {
-    featureType: "administrative.country",
-    elementType: "geometry.stroke",
-    stylers: [{ color: "#b7ae98" }],
-  },
-  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#d5cebd" }] },
-  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#c3bda9" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#c3bda9" }] },
-  { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+  ...NO_LABELS_AT_ALL,
+  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#F3EADB" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#F3EADB" }] },
   { featureType: "road", elementType: "geometry", stylers: [{ color: "#FBF2E8" }] },
-  { featureType: "road", elementType: "labels", stylers: [{ visibility: "off" }] },
-  {
-    featureType: "road.highway",
-    elementType: "geometry",
-    stylers: [{ color: "#e4dcc9" }],
-  },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#F1E7D5" }] },
   { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#85C6C2" }] },
-  {
-    featureType: "water",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#8a8570" }],
-  },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#E9DCC3" }] },
 ];
 
 // Warm sepia/tan-tinted variant of the light basemap, matching the
@@ -49,17 +38,12 @@ export const PARK_MAP_STYLE: google.maps.MapTypeStyle[] = [
 // CSS filter previously applied to MapTiler "positron" tiles in ConnectMap.tsx.
 export const CONNECT_MAP_STYLE: google.maps.MapTypeStyle[] = [
   { elementType: "geometry", stylers: [{ color: "#F5EEDD" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#8c8168" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#F5EEDD" }] },
-  { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#d8cdb2" }] },
+  ...NO_LABELS_AT_ALL,
   { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#EFE6D2" }] },
-  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#e2d8bf" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#cfd2ae" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#e6dcc4" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#EFE6D2" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#F5EEDD" }] },
   { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#9fcbc4" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#E4D8BC" }] },
 ];
 
 // Teal-water / cream-land variant matching
@@ -69,33 +53,29 @@ export const CONNECT_MAP_STYLE: google.maps.MapTypeStyle[] = [
 // now share this identical style.
 export const TEAL_WATER_MAP_STYLE: google.maps.MapTypeStyle[] = [
   { elementType: "geometry", stylers: [{ color: "#FBF2E8" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#7c7660" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#FBF2E8" }] },
-  { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#cfc4a4" }] },
+  ...NO_LABELS_AT_ALL,
   { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#F3E9D4" }] },
-  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#e0d5b7" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#bcc9a4" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#e6d9b8" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#F3E9D4" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#FBF2E8" }] },
   { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#7FC6C0" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#E6D6B8" }] },
 ];
 
 // Muted sepia variant matching
 // `sepia(0.4) hue-rotate(-20deg) contrast(0.88) brightness(0.96) saturate(0.5)`
 // previously applied in InteractiveMap.tsx (park route-distance maps).
+// Colors below are computed by actually running that exact CSS filter chain
+// against MapTiler "positron" 's documented base land (#F1EEE8) and water
+// (#AAD3DF) tones, not eyeballed — land resolves to #ECDFD9 (a cool, faintly
+// pink-beige, notably less yellow/olive than earlier guesses in this file's
+// history), water to #C5C8C2 (close to land in both hue and lightness, which
+// is why water reads as barely distinguishable from land at a glance).
 export const ROUTE_MAP_STYLE: google.maps.MapTypeStyle[] = [
-  { elementType: "geometry", stylers: [{ color: "#EFE4CB" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#7c7660" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#EFE4CB" }] },
-  { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#c9bd9c" }] },
-  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#E9DCBE" }] },
-  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#dccca3" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#b7bd94" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#f7efd9" }] },
-  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#ddcda3" }] },
+  { elementType: "geometry", stylers: [{ color: "#ECDFD9" }] },
+  ...NO_LABELS_AT_ALL,
+  { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#ECDFD9" }] },
+  { featureType: "poi", elementType: "geometry", stylers: [{ color: "#ECDFD9" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#FBEFEA" }] },
   { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#8FBDB2" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#C5C8C2" }] },
 ];

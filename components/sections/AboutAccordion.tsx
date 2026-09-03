@@ -11,28 +11,28 @@ const BG_COLORS = ["#F9F7F2", "#EEEAE0", "#DBD6CB", "#CBC4B5"];
 const DEFS = [
   {
     title: "Developer",
-    icon: "/home/icon-developer.svg",
+    icon: "/homeasset/icon-developer.svg",
     content:
       "We develop institutional-grade Industrial & Logistics infrastructure designed to meet the evolving needs of occupiers across India’s key growth markets.",
     href: "/parks",
   },
   {
     title: "Investor",
-    icon: "/home/icon-investor.svg",
+    icon: "/homeasset/icon-investor.svg",
     content:
       "We identify and invest in opportunities that create long-term value through strategic asset development and disciplined execution.",
     href: "/investors",
   },
   {
     title: "Capital Manager",
-    icon: "/home/icon-capital.svg",
+    icon: "/homeasset/icon-capital.svg",
     content:
       "We structure and deploy capital to support scalable growth, optimize investment performance and unlock value across the asset lifecycle.",
     href: "/solutions#solution-capital-deployment",
   },
   {
     title: "Property Manager",
-    icon: "/home/icon-property.svg",
+    icon: "/homeasset/icon-property.svg",
     content:
       "We oversee asset operations and tenant engagement to ensure efficient performance, long-term sustainability and operational excellence.",
     href: "/solutions#solution-property-management",

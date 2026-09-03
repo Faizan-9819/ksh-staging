@@ -72,7 +72,7 @@
 //     const imgs: HTMLImageElement[] = [];
 //     for (let i = startFrame; i <= endFrame; i++) {
 //       const img = new Image();
-//       img.src = `/home/frames2/frame_${padNum(i)}.webp`;
+//       img.src = `/homeasset/frames2/frame_${padNum(i)}.webp`;
 //       img.onload = () => {
 //         if (i === startFrame) drawFrame(0);
 //       };
@@ -330,7 +330,7 @@ export default function ScrollFrames() {
       // 218 requests' worth of background work that should never delay
       // anything already competing for the connection pool above the fold.
       img.fetchPriority = "low";
-      img.src = `/home/frames2/frame_${padNum(i)}.webp`;
+      img.src = `/homeasset/frames2/frame_${padNum(i)}.webp`;
       img.onload = () => {
         const idx = i - startFrame;
         // All 218 requests fire at once, so any frame can finish loading
@@ -463,7 +463,7 @@ export default function ScrollFrames() {
           className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         >
           <source
-            src="/home/hero/final home mobile  white v3.mp4"
+            src="/homeasset/final home mobile  white v3.mp4"
             type="video/mp4"
           />
         </video>

@@ -113,7 +113,7 @@
 //               className="w-full overflow-hidden rounded-[20px]"
 //             >
 //               <img
-//                 src="/manimg.jpg"
+//                 src="/homeasset/manimg.jpg"
 //                 alt="KSH INFRA logistics professional"
 //                 className="w-full object-cover"
 //               />
@@ -140,7 +140,7 @@
 //           >
 //             <motion.div className="hidden lg:flex relative z-0 justify-end w-full">
 //               <img
-//                 src="/about.webp"
+//                 src="/homeasset/about.webp"
 //                 alt="KSH INFRA logistics professional"
 //                 className="w-auto h-full object-contain"
 //               />
@@ -274,7 +274,7 @@ export default function About() {
               className="w-full max-w-sm lg:max-w-none mx-auto lg:mx-0 overflow-hidden rounded-[20px] !transform-none lg:!transform-stretch"
             >
               <img
-                src="/manimg.jpg"
+                src="/homeasset/manimg.jpg"
                 alt="KSH INFRA Logistics professional"
                 className="w-full object-cover aspect-[4/3] lg:aspect-auto"
               />
@@ -298,7 +298,7 @@ export default function About() {
           <div className="hidden lg:flex absolute right-0 bottom-0 max-w-[60%] 2xl:max-w-[55%] z-0 justify-end w-full">
             <div className="relative z-0 justify-end w-full">
               <img
-                src="/about.webp"
+                src="/homeasset/about.webp"
                 alt="KSH INFRA Logistics professional"
                 className="w-auto h-full object-contain"
               />

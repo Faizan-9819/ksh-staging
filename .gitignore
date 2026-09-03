@@ -45,3 +45,7 @@ next-env.d.ts
 
 
 dump.tsx
+
+# assets confirmed unused in source, moved out of public/ rather than
+# deleted outright — kept here in case something was missed
+/_unused_backup/

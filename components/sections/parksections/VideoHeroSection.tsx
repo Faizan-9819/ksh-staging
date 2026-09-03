@@ -83,7 +83,7 @@ export interface VideoHeroContent {
 }
 
 const DEFAULT_CONTENT: VideoHeroContent = {
-  videoSrc: "/home/hero/Hero_Section.mp4",
+  videoSrc: "/homeasset/Hero_Section.mp4",
   title: "KSH Chakan Park IV",
   subtitle: "Pune, Maharashtra",
   areaValue: "0.36 Mn.",

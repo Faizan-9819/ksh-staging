@@ -24,27 +24,27 @@ const ITEMS = [
   {
     title: "Learn, Grow & Lead",
     desc: "At KSH INFRA, we invest in your career growth. Our structured career paths, mentorship programs and skill-building opportunities ensure that every team member has the tools to succeed and grow.",
-    img: "/acc1.jpg",
+    img: "/homeasset/acc1.jpg",
   },
   {
     title: "Driven by Collaboration",
     desc: "We foster a workplace built on collaboration, inclusivity, and innovation. Our dynamic environment encourages creativity, teamwork, and a strong sense of belonging, making KSH INFRA a great place to work.",
-    img: "/acc2.jpg",
+    img: "/homeasset/acc2.jpg",
   },
   {
     title: "Opportunities that Create Impact",
     desc: "KSH INFRA has exciting career opportunities for everyone whether you’re just starting out or have experience. Join us and find a role that matches your ambitions and skills. Let’s help you build a rewarding career together that align with your ambitions and skills.",
-    img: "/acc3.jpg",
+    img: "/homeasset/acc3.jpg",
   },
 ];
 
 const IMGS = [
-  "/acc1.jpg",
-  "/acc2.jpg",
-  "/this.jpg",
-  "/acc1.jpg",
-  "/acc2.jpg",
-  "/this.jpg",
+  "/homeasset/acc1.jpg",
+  "/homeasset/acc2.jpg",
+  "/homeasset/this.jpg",
+  "/homeasset/acc1.jpg",
+  "/homeasset/acc2.jpg",
+  "/homeasset/this.jpg",
 ];
 
 export default function Growth() {
