@@ -11,7 +11,7 @@ type Slide = {
   description: string;
   type?: "image" | "video";
 };
-
+//
 type TabConfig = {
   label: string;
   slides: Slide[];
