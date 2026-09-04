@@ -46,7 +46,7 @@ export default function NewsListSection({
                 key={post.id}
                 post={post}
                 featuredImage={post.featuredImage}
-                height="2xl:h-[529px] lg:h-[480px]"
+                height="2xl:h-[529px] 1440:h-[500px] lg:h-[450px]"
               />
             ))
           ) : (
