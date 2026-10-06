@@ -104,8 +104,10 @@ export default function CaseStudies() {
         </div>
       </div>
 
-      {/* Full-Width Carousel Wrapper */}
-      <div className="w-full pl-[max(1rem,calc((100vw-1440px)/2+1rem))] sm:pl-[max(1.5rem,calc((100vw-1440px)/2+1.5rem))] lg:pl-[max(2rem,calc((100vw-1440px)/2+2rem))] xl:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] pr-0">
+      {/* Full-Width Carousel Wrapper — bleeds off the right edge from sm up
+          (peeking next slide); on phones each slide is 100% wide, so it gets
+          a matching right gutter instead of running flush to the screen edge. */}
+      <div className="w-full pl-[max(1rem,calc((100vw-1440px)/2+1rem))] sm:pl-[max(1.5rem,calc((100vw-1440px)/2+1.5rem))] lg:pl-[max(2rem,calc((100vw-1440px)/2+2rem))] xl:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] pr-4 sm:pr-0">
         <div className="overflow-hidden w-full" ref={emblaRef}>
           <div className="flex gap-5 sm:gap-6">
             {DEFS.map((cd, index) => (
@@ -168,8 +170,10 @@ export default function CaseStudies() {
               </div>
             ))}
 
-            {/* End-of-track spacer element for right-side breathing room */}
-            <div className="flex-none w-8 lg:w-12 xl:w-16 h-full pointer-events-none" />
+            {/* End-of-track spacer element for right-side breathing room —
+                hidden on phones, where the wrapper's pr-4 already provides it
+                and a spacer would leave the last slide scrolled off-center. */}
+            <div className="hidden sm:block flex-none w-8 lg:w-12 xl:w-16 h-full pointer-events-none" />
           </div>
         </div>
       </div>

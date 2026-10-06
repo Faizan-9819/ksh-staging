@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { isNewsPost } from "@/lib/wordpress";
+import { revalidateTag } from "next/cache";
+import { WP_POSTS_TAG } from "@/lib/wordpress";
 
-// WordPress webhook — call on post publish/update instead of waiting out the
-// fixed ISR TTLs. Configure this URL + REVALIDATE_SECRET as a WP Webhooks
-// (or similar plugin) action: POST { secret, slug, categories }.
+// WordPress webhook — call on post publish/update/trash instead of waiting out
+// the ISR window. Configure this URL + REVALIDATE_SECRET as a WP Webhooks
+// (or similar plugin) action: POST { secret }. Any other fields (slug,
+// categories) are ignored. Expiring the shared posts tag refreshes every page
+// that shows post data — /blogs, /news, the home page, post pages' related
+// lists, the sitemap — not just a hand-picked list of paths.
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { secret, slug, categories } = body || {};
+    const { secret } = body || {};
 
     if (!process.env.REVALIDATE_SECRET) {
       return NextResponse.json(
@@ -21,18 +24,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Invalid secret." }, { status: 401 });
     }
 
-    if (!slug) {
-      return NextResponse.json({ success: false, error: "Missing slug." }, { status: 400 });
-    }
+    // expire: 0 makes the next visit wait for fresh data. The recommended
+    // "max" profile would serve the stale copy once more first — after a slug
+    // edit, that copy still links the old (now 404) URL.
+    revalidateTag(WP_POSTS_TAG, { expire: 0 });
 
-    const section = isNewsPost(Array.isArray(categories) ? categories : []) ? "news" : "blogs";
-
-    revalidatePath(`/${section}/${slug}`);
-    revalidatePath("/blogs");
-    revalidatePath("/news");
-    revalidatePath("/sitemap.xml");
-
-    return NextResponse.json({ success: true, revalidated: [`/${section}/${slug}`, "/blogs", "/news"] });
+    return NextResponse.json({ success: true, revalidated: [WP_POSTS_TAG] });
   } catch (error) {
     console.error("Revalidate webhook error:", error);
     return NextResponse.json({ success: false, error: "Failed to revalidate." }, { status: 500 });

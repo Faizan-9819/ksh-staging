@@ -54,11 +54,10 @@ export default function RelatedPostsSlider({
         }}
       >
         {posts.map((post) => (
-          <SwiperSlide key={post.id}>
+          <SwiperSlide key={post.id} className="h-auto!">
             <BlogCard
               post={post}
               featuredImage={post.featuredImage}
-              height="lg:h-[490px]"
             />
           </SwiperSlide>
         ))}
