@@ -6,10 +6,10 @@ import type { PressRelease } from "./press-releases";
 
 interface PressCardProps {
   item: PressRelease;
-  height: string;
 }
 
-export default function PressCard({ item, height }: PressCardProps) {
+// Content-driven height — see BlogCard for why a fixed height clips the button.
+export default function PressCard({ item }: PressCardProps) {
   const formattedDate = new Date(item.date).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
@@ -18,7 +18,7 @@ export default function PressCard({ item, height }: PressCardProps) {
 
   return (
     <div
-      className={`flex flex-col w-full overflow-hidden rounded-[20px] border border-[#cdcdcd] bg-white ${height}`}
+      className={`flex flex-col w-full overflow-hidden rounded-[20px] border border-[#cdcdcd] bg-white h-full`}
     >
       <a
         href={item.href}
@@ -61,7 +61,7 @@ export default function PressCard({ item, height }: PressCardProps) {
           hoverArrowColor="stroke-white"
           borderColor="border-[#cdcdcd]"
           textSize="text-[14px]"
-          className="self-start px-5 py-2 gap-3 mt-1"
+          className="self-start px-5 py-2 gap-3 mt-auto"
         />
       </div>
     </div>

@@ -7,21 +7,21 @@ import Btn from "@/components/ui/Btn";
 interface BlogCardProps {
   post: WPPost;
   featuredImage: string;
-  height: string;
 }
 
-export default function BlogCard({
-  post,
-  featuredImage,
-  height,
-}: BlogCardProps) {
+// No fixed height on purpose: the image is aspect-[4/3] of the card's WIDTH,
+// so any hard-coded height clips the "Learn More" button at card widths the
+// breakpoints didn't anticipate (e.g. 1463px viewports at 175% scaling).
+// h-full + the grid/swiper row-stretch keeps sibling cards equal height, and
+// mt-auto on the button pins it to the bottom of each card.
+export default function BlogCard({ post, featuredImage }: BlogCardProps) {
   const categoryLabel = isNewsPost(post.categories) ? "News" : "Blogs";
   const href = postPath(post);
   const titleText = post.title?.rendered || "";
 
   return (
     <div
-      className={`flex flex-col w-full overflow-hidden rounded-[20px] border border-[#cdcdcd] bg-white ${height}`}
+      className={`flex flex-col w-full overflow-hidden rounded-[20px] border border-[#cdcdcd] bg-white h-full`}
     >
       <Link
         href={href}
@@ -65,7 +65,7 @@ export default function BlogCard({
           hoverArrowColor="stroke-white"
           borderColor="border-[#cdcdcd]"
           textSize="text-[14px]"
-          className="self-start px-5 py-2 gap-3 mt-1"
+          className="self-start px-5 py-2 gap-3 mt-auto"
         />
       </div>
     </div>

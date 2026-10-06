@@ -246,10 +246,11 @@ import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import { FiMail, FiPhone } from "react-icons/fi";
 
-// href is null where this project has no matching page yet ("Media" is a
-// navbar dropdown of Blogs/News/Press Release with no single landing page of
-// its own) — those labels stay visible but non-navigating instead of linking
-// to the wrong place.
+// href is null where this project has no matching page yet — those labels
+// stay visible but non-navigating instead of linking to the wrong place.
+// "Media" points at /blogs, the tabbed Blogs/News/Press Release landing page
+// the navbar's Media dropdown links into (a "#" fallback made Ctrl+click
+// just reopen whatever page you were already on).
 const NAV_COLS: {
   title: string;
   links: { label: string; href: string | null }[];
@@ -269,7 +270,7 @@ const NAV_COLS: {
     links: [
       { label: "Solutions", href: "/solutions" },
       { label: "Sustainability", href: "/sustainability" },
-      { label: "Media", href: null },
+      { label: "Media", href: "/blogs" },
       { label: "Contact", href: "/contact-us" },
     ],
   },

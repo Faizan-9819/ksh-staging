@@ -8,6 +8,16 @@ export const WORDPRESS_API = `${WORDPRESS_URL}/wp-json/wp/v2`;
 export const BLOG_CATEGORY_IDS = [6, 17];
 export const NEWS_CATEGORY_IDS = [7, 18];
 
+// Every post fetch shares one cache tag and one revalidate window. They used
+// to differ — listings at 900s, the single-post lookup at 60s — so after a
+// slug was edited in WordPress, /blogs/new-slug resolved within a minute while
+// the /blogs listing kept linking the old slug (now a 404) for 15+ minutes.
+// app/api/revalidate expires WP_POSTS_TAG on publish/update, so every page
+// showing post data refreshes on its next visit; the window is the backstop
+// for when that webhook doesn't fire.
+export const WP_POSTS_TAG = "wp-posts";
+const POSTS_CACHE = { revalidate: 120, tags: [WP_POSTS_TAG] };
+
 export interface WPRenderedField {
   rendered: string;
 }
@@ -50,7 +60,7 @@ export function postPath(post: Pick<WPPost, "categories" | "slug">): string {
   return `/${section}/${post.slug}`;
 }
 
-async function fetchWithTimeout(url: string, init: RequestInit & { next?: { revalidate: number } }, timeoutMs = 5000) {
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 5000) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -86,7 +96,7 @@ export async function resolveFeaturedImage(post: WPPost): Promise<string> {
   if (post.featured_media) {
     try {
       const res = await fetchWithTimeout(`${WORDPRESS_API}/media/${post.featured_media}`, {
-        next: { revalidate: 60 },
+        next: POSTS_CACHE,
       });
       if (res.ok) {
         const media = await res.json();
@@ -105,7 +115,7 @@ export async function fetchPostBySlug(slug: string): Promise<WPPostWithImage | n
   try {
     const res = await fetchWithTimeout(
       `${WORDPRESS_API}/posts?slug=${encodeURIComponent(slug)}&_embed`,
-      { next: { revalidate: 60 } },
+      { next: POSTS_CACHE },
     );
     if (!res.ok) return null;
 
@@ -130,7 +140,7 @@ export async function fetchAllPosts(perPage = 100): Promise<WPPost[]> {
   try {
     const res = await fetchWithTimeout(
       `${WORDPRESS_API}/posts?_embed&per_page=${perPage}`,
-      { next: { revalidate: 900 } },
+      { next: POSTS_CACHE },
       BULK_FETCH_TIMEOUT_MS,
     );
     if (!res.ok) return [];
@@ -145,7 +155,7 @@ export async function fetchPostsPage(page: number, perPage = 31): Promise<WPPost
   try {
     const res = await fetchWithTimeout(
       `${WORDPRESS_API}/posts?per_page=${perPage}&page=${page}&_embed`,
-      { next: { revalidate: 900 } },
+      { next: POSTS_CACHE },
       BULK_FETCH_TIMEOUT_MS,
     );
     if (!res.ok) return [];
@@ -163,7 +173,7 @@ export async function fetchPostsByCategories(categoryIds: number[], perPage = 10
   try {
     const res = await fetchWithTimeout(
       `${WORDPRESS_API}/posts?categories=${categoryIds.join(",")}&_embed&per_page=${perPage}`,
-      { next: { revalidate: 900 } },
+      { next: POSTS_CACHE },
     );
     if (!res.ok) return [];
     return await res.json();

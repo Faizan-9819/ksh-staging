@@ -195,12 +195,13 @@ const TimeCard: React.FC<TimeCardProps> = ({ image, content, isAbove }) => {
       <motion.div
         className={`${
           isAbove ? "topcard" : "bcard"
-        } relative w-[320px] 2xl:w-[320px] lg:block hidden h-[200px] 2xl:h-[220px] overflow-hidden cursor-pointer`}
+        } relative w-full max-w-[320px] lg:block hidden h-[200px] 2xl:h-[220px] overflow-hidden cursor-pointer`}
         initial="rest"
         whileHover="hover"
         animate="rest"
       >
-        {/* Full Image */}
+        {/* Full Image — width capped to the slide (w-full) so it can't spill
+            past its Swiper slide at 1024–1280px, where slides are < 320px. */}
         <img
           src={image || "/time/t1.png"}
           alt="Time Card"

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { WORDPRESS_API, isNewsPost } from "@/lib/wordpress";
+import { WORDPRESS_API, WP_POSTS_TAG, isNewsPost } from "@/lib/wordpress";
 
 const SITE_URL = "https://www.kshinfra.com";
 
@@ -56,7 +56,7 @@ async function fetchAllPostsPaginated(): Promise<SitemapPostEntry[]> {
       const timeout = setTimeout(() => controller.abort(), 5000);
       const res = await fetch(
         `${WORDPRESS_API}/posts?per_page=${perPage}&page=${currentPage}`,
-        { next: { revalidate: 3600 }, signal: controller.signal },
+        { next: { revalidate: 3600, tags: [WP_POSTS_TAG] }, signal: controller.signal },
       );
       clearTimeout(timeout);
 

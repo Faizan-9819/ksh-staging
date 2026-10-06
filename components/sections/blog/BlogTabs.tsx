@@ -212,7 +212,6 @@ export default function BlogTabs({
                 <PressCard
                   key={item.id}
                   item={item}
-                  height="2xl:h-[529px] 1440:h-[500px] lg:h-[450px]"
                 />
               ))
             ) : (
@@ -221,7 +220,6 @@ export default function BlogTabs({
                   key={item.id}
                   post={item}
                   featuredImage={item.featuredImage}
-                  height="2xl:h-[529px] 1440:h-[500px] lg:h-[450px]"
                 />
               ))
             )

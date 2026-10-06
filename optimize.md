@@ -30,7 +30,7 @@ growth, not needed to hit the budget today).
 | 8 | Bot/abuse rate limiting | Not done | **Do this before going live** regardless of traffic volume — a burst like the old Cloudways incident is a real risk independent of average daily traffic. |
 | 9 | PM2/Cloudways deploy config | **Done** — `ecosystem.config.js`, `scripts/pm2-deploy.sh`, `.htaccess`, and the `postbuild` script are all already removed from this repo | — |
 | 10 | Vercel spend guardrails | Not done — dashboard setting, no code | **Do this regardless of traffic** — it's the only thing that turns "should stay at $20" into "guaranteed to stay at $20" if traffic ever spikes unexpectedly (bot burst, viral post, etc.). Zero engineering cost. |
-| 11 | Blog/news revalidate window → 120s | Not done — still 900s/60s | Not urgent at this volume, but cheap and safe to do whenever — doesn't affect cost either way at ~200 visits/day. |
+| 11 | Blog/news revalidate window → 120s | **Done** — every post fetch in `lib/wordpress.ts` now shares `revalidate: 120` + the `wp-posts` tag, and the webhook expires that tag. Webhook still needs `REVALIDATE_SECRET` set on Vercel + a WP webhook plugin pointed at `/api/revalidate` | Was causing a real bug: after a slug edit, `/blogs` linked the old (404) slug for 15+ min while the post page had already moved. |
 
 **Bottom line at 72,000/yr: only two things are actually load-bearing for the $20
 cap — Section 8 (bot/rate-limit protection) and Section 10 (Vercel spend cap),
