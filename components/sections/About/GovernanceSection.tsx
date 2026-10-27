@@ -137,7 +137,7 @@ const INSIGHTS_POINTS: InsightPoint[] = [
     number: "01",
     title: "SUSTAINABILITY",
     description: "A core value, a guiding principle",
-    imageSrc: "/about/gov/gov2.jpg",
+    imageSrc: "/about/gov/gov2F.png",
     link: "/sustainability",
   },
   {
