@@ -41,7 +41,7 @@ export default function ParkMap() {
       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
       const fill = p * spans.length;
       spans.forEach((s, i) => {
-        s.style.color = i < fill ? "#212121" : "#BDAEA6";
+        s.style.color = i < fill ? "#212121" : "#64635D";
       });
     };
 
@@ -112,12 +112,12 @@ export default function ParkMap() {
 
               {/* Title with Scroll Fill Animation */}
               <h2 className="m-0 font-sora font-bold text-[32px] sm:text-[40px] lg:text-[48px] leading-[1.15] tracking-[-0.02em]">
-                <span ref={greyRef} className="block text-[#BDAEA6]">
+                <span ref={greyRef} className="block text-[#64635D]">
                   {HEADING_WORDS.map((word, i) => (
                     <React.Fragment key={i}>
                       <span
                         data-w="1"
-                        className="text-[#BDAEA6] [transition:color_.5s_ease] font-bold inline-block"
+                        className="text-[#64635D] [transition:color_.5s_ease] font-bold inline-block"
                       >
                         {word}
                       </span>

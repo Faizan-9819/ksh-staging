@@ -697,9 +697,9 @@ const Timeline = () => {
                       >
                         <div className="relative z-10">
                           <div className="w-[70px] h-[28px] rounded-md bg-[#59624D] flex items-center justify-center shadow-md">
-                            <h2 className="text-[18px] font-semibold text-white leading-none">
+                            <h3 className="text-[18px] font-semibold text-white leading-none">
                               {year}
-                            </h2>
+                            </h3>
                           </div>
                         </div>
                       </div>
@@ -805,9 +805,9 @@ const Timeline = () => {
                       {/* CENTER YEAR BADGE */}
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                         <div className="w-[70px] h-[28px] rounded-md bg-[#59624D] flex items-center justify-center shadow-md">
-                          <h2 className="text-[18px] font-semibold text-white leading-none">
+                          <h3 className="text-[18px] font-semibold text-white leading-none">
                             {year}
-                          </h2>
+                          </h3>
                         </div>
                       </div>
 

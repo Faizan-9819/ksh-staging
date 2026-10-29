@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import type { SolutionCardData } from "./solutionsData";
 
 const SIDEBAR_TICK_TRANSITION_MS = 350;
@@ -17,7 +17,20 @@ interface SolutionsSidebarProps {
   tickSpacingClassName?: string;
   contentClassName?: string;
   navClassName?: string;
+  /** Accessible name of the <nav> landmark. */
+  ariaLabel?: string;
+  /**
+   * Render as an ARIA tablist (Solutions page, where each item swaps the
+   * panel beside it). Every tab stays in the Tab order and selects itself on
+   * focus; Arrow keys / Home / End also move between tabs. Hopping from a
+   * tab into its panel's buttons is handled by SolutionsTimeline. Panels
+   * must use the id from `solutionPanelId`.
+   */
+  asTabs?: boolean;
 }
+
+export const solutionTabId = (id: string) => `solution-tab-${id}`;
+export const solutionPanelId = (id: string) => `solution-${id}`;
 
 function SolutionsSidebar({
   items,
@@ -27,14 +40,46 @@ function SolutionsSidebar({
   tickSpacingClassName = "mb-7",
   contentClassName = "p-5 lg:p-6 mt-2",
   navClassName = SIDEBAR_NAV_CLASS_NAME,
+  ariaLabel = "Solutions timeline",
+  asTabs = false,
 }: SolutionsSidebarProps) {
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    const last = items.length - 1;
+    let next: number;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      next = index === last ? 0 : index + 1;
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      next = index === 0 ? last : index - 1;
+    } else if (e.key === "Home") {
+      next = 0;
+    } else if (e.key === "End") {
+      next = last;
+    } else {
+      return;
+    }
+    e.preventDefault();
+    onSelect(next);
+    tabRefs.current[next]?.focus();
+  };
+
   return (
     <nav
-      aria-label="Solutions timeline"
+      aria-label={ariaLabel}
       className={navClassName}
       style={{ top: topOffset }}
     >
-      <div className={`rounded-[28px] bg-white ${contentClassName}`}>
+      <div
+        className={`rounded-[28px] bg-white ${contentClassName}`}
+        {...(asTabs
+          ? {
+              role: "tablist",
+              "aria-label": ariaLabel,
+              "aria-orientation": "vertical" as const,
+            }
+          : {})}
+      >
         {items.map((item, index) => {
           const isActive = index === activeIndex;
 
@@ -53,8 +98,23 @@ function SolutionsSidebar({
               {/* Major item button with longer tick mark */}
               <button
                 type="button"
+                ref={(el) => {
+                  tabRefs.current[index] = el;
+                }}
                 onClick={() => onSelect(index)}
-                aria-current={isActive ? "step" : undefined}
+                {...(asTabs
+                  ? {
+                      id: solutionTabId(item.id),
+                      role: "tab",
+                      "aria-selected": isActive,
+                      "aria-controls": solutionPanelId(item.id),
+                      onFocus: () => {
+                        if (!isActive) onSelect(index);
+                      },
+                      onKeyDown: (e: React.KeyboardEvent) =>
+                        handleTabKeyDown(e, index),
+                    }
+                  : { "aria-current": isActive ? ("step" as const) : undefined })}
                 className="mb-3 flex cursor-pointer items-center gap-3 text-left"
               >
                 <span

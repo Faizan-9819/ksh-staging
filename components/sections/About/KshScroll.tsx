@@ -106,7 +106,7 @@
 //       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
 //       const fill = p * spans.length;
 //       spans.forEach((s, i) => {
-//         s.style.color = i < fill ? "#212121" : "#BDAEA6";
+//         s.style.color = i < fill ? "#212121" : "#64635D";
 //       });
 //     };
 //     window.addEventListener("scroll", onScroll, { passive: true });
@@ -130,7 +130,7 @@
 //                 <span
 //                   key={`heavy-${i}`}
 //                   data-w="1"
-//                   className="text-[#BDAEA6] [transition:color_.5s_ease] font-bold inline-block mr-2"
+//                   className="text-[#64635D] [transition:color_.5s_ease] font-bold inline-block mr-2"
 //                 >
 //                   {word}
 //                 </span>
@@ -139,7 +139,7 @@
 //                 <span
 //                   key={`light-${i}`}
 //                   data-w="1"
-//                   className="text-[#BDAEA6] [transition:color_.5s_ease] font-normal inline-block mr-2"
+//                   className="text-[#64635D] [transition:color_.5s_ease] font-normal inline-block mr-2"
 //                 >
 //                   {word}
 //                 </span>
@@ -424,6 +424,7 @@
 //
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useRef, useEffect, useState } from "react";
 
 type IconKey =
@@ -529,7 +530,7 @@ const DesktopPanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
       const fill = p * spans.length;
       spans.forEach((s, i) => {
-        s.style.color = i < fill ? "#212121" : "#BDAEA6";
+        s.style.color = i < fill ? "#212121" : "#64635D";
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -553,7 +554,7 @@ const DesktopPanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
                 <span
                   key={`heavy-${i}`}
                   data-w="1"
-                  className="text-[#BDAEA6] [transition:color_.5s_ease] font-bold inline-block mr-2"
+                  className="text-[#64635D] [transition:color_.5s_ease] font-bold inline-block mr-2"
                 >
                   {word}
                 </span>
@@ -562,7 +563,7 @@ const DesktopPanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
                 <span
                   key={`light-${i}`}
                   data-w="1"
-                  className="text-[#BDAEA6] [transition:color_.5s_ease] font-normal inline-block mr-2"
+                  className="text-[#64635D] [transition:color_.5s_ease] font-normal inline-block mr-2"
                 >
                   {word}
                 </span>
@@ -589,6 +590,7 @@ const DesktopPanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
               return (
                 <div key={item.title} className="border-b border-[#E3E2DD]">
                   <div
+                    {...PRESSABLE}
                     onClick={() => setActive(i)}
                     className="flex items-start justify-between gap-2 py-[clamp(20px,2.2vw,30px)] cursor-pointer"
                   >
@@ -628,7 +630,7 @@ const DesktopPanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
-                                  className="text-[16px] tracking-[-0.32px] transition-colors text-[#8F8F8F]! hover:text-[#111]! font-normal"
+                                  className="text-[16px] tracking-[-0.32px] transition-colors text-[#636363]! hover:text-[#111]! font-normal"
                                 >
                                   FIND OUT MORE : {item.link}
                                 </a>
@@ -737,6 +739,7 @@ const MobilePanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
             return (
               <div
                 key={item.title}
+                {...PRESSABLE}
                 onClick={() => setActive(i)}
                 className="cursor-pointer"
               >
@@ -826,7 +829,7 @@ const MobilePanel: React.FC<{ data: SustainabilityData[] }> = ({ data }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="lg:text-[16px] text-[12px] tracking-[-0.32px] transition-colors text-[#8F8F8F] hover:text-black font-normal break-all"
+                            className="lg:text-[16px] text-[12px] tracking-[-0.32px] transition-colors text-[#636363] hover:text-black font-normal break-all"
                           >
                             FIND OUT MORE : {item.link}
                           </a>

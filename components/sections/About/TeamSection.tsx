@@ -54,7 +54,7 @@
 //       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
 //       const fill = p * spans.length;
 //       spans.forEach((s, i) => {
-//         s.style.color = i < fill ? "#212121" : "#BDAEA6";
+//         s.style.color = i < fill ? "#212121" : "#64635D";
 //       });
 //     };
 //     window.addEventListener("scroll", onScroll, { passive: true });
@@ -74,7 +74,7 @@
 //           {/* Animated Title */}
 //           <div className="">
 //             <h2 className="m-0 font-[family-name:var(--font-sora),sans-serif] leading-[1.2] lg:leading-[1.18] tracking-[-0.012em] text-[22px] sm:text-[30px] lg:text-[38px] xl:text-[46px]">
-//               <span ref={greyRef} className="block text-[#BDAEA6]">
+//               <span ref={greyRef} className="block text-[#64635D]">
 //                 {GREY_WORDS.map((word, i) => {
 //                   const cleanWord = word.replace(/[^a-zA-Z]/g, "");
 //                   const isBold = BOLD_WORDS.includes(cleanWord) && i < 7;
@@ -83,7 +83,7 @@
 //                     <span
 //                       key={i}
 //                       data-w="1"
-//                       className={`text-[#BDAEA6] [transition:color_.5s_ease] ${
+//                       className={`text-[#64635D] [transition:color_.5s_ease] ${
 //                         isBold ? "font-semibold" : "font-normal"
 //                       }`}
 //                     >
@@ -177,7 +177,7 @@ export default function TeamSection() {
       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
       const fill = p * spans.length;
       spans.forEach((s, i) => {
-        s.style.color = i < fill ? "#212121" : "#BDAEA6";
+        s.style.color = i < fill ? "#212121" : "#64635D";
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -199,14 +199,14 @@ export default function TeamSection() {
             <h2 className="m-0 font-[family-name:var(--font-sora),sans-serif] leading-[1.2] lg:leading-[1.18] tracking-[-0.012em] text-[20px] sm:text-[30px] lg:text-[40px]">
               <span
                 ref={greyRef}
-                className="block  lg:max-w-[900px] text-[#BDAEA6]"
+                className="block  lg:max-w-[900px] text-[#64635D]"
               >
                 {GREY_WORDS.map((word, i) => {
                   return (
                     <React.Fragment key={i}>
                       <span
                         data-w="1"
-                        className="text-[#BDAEA6] [transition:color_.5s_ease] tracking-[-0.8px] leading-nomal font-semibold"
+                        className="text-[#64635D] [transition:color_.5s_ease] tracking-[-0.8px] leading-nomal font-semibold"
                       >
                         {word}{" "}
                       </span>

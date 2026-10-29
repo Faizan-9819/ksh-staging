@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "@/components/ui/Link";
+import { usePathname } from "next/navigation";
+import { useDialogA11y } from "./useDialogA11y";
 import {
   AnimatePresence,
   motion,
@@ -89,6 +91,8 @@ export default function Navbar({}: NavbarProps) {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const dropdownOpen = openDropdown !== null;
   const dropdownLayerRef = useRef<HTMLDivElement | null>(null);
+  const lastDropdownKeyRef = useRef<DropdownKey | null>(null);
+  const pathname = usePathname();
   const dropdownTriggerRefs = useRef<
     Record<DropdownKey, HTMLButtonElement | null>
   >({
@@ -189,7 +193,11 @@ export default function Navbar({}: NavbarProps) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMenuOpen(false);
-        setOpenDropdown(null);
+        setOpenDropdown((current) => {
+          // Return focus to the trigger that opened the panel.
+          if (current) dropdownTriggerRefs.current[current]?.focus();
+          return null;
+        });
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -197,8 +205,27 @@ export default function Navbar({}: NavbarProps) {
   }, [menuOpen, dropdownOpen]);
 
   const closeDropdown = () => setOpenDropdown(null);
-  const toggleDropdown = (key: DropdownKey) =>
+  const toggleDropdown = (key: DropdownKey) => {
+    lastDropdownKeyRef.current = key;
     setOpenDropdown((current) => (current === key ? null : key));
+  };
+
+  // Keyboard users: move focus into the opened panel (its first link, past
+  // the duplicated white nav row) instead of leaving it on the trigger the
+  // white layer now covers.
+  useEffect(() => {
+    if (!openDropdown) return;
+    const t = setTimeout(() => {
+      const layer = dropdownLayerRef.current;
+      if (!layer) return;
+      const row = layer.querySelector("[data-white-nav-row]");
+      const first = Array.from(
+        layer.querySelectorAll<HTMLElement>("a[href]"),
+      ).find((el) => !row?.contains(el));
+      first?.focus({ preventScroll: true });
+    }, 60);
+    return () => clearTimeout(t);
+  }, [openDropdown]);
 
   // Click-outside-to-close: only listens while a white dropdown layer is
   // open; ignores clicks inside the layer itself or on any trigger link.
@@ -238,6 +265,8 @@ export default function Navbar({}: NavbarProps) {
   return (
     <>
       <motion.nav
+        aria-label="Main"
+        onFocusCapture={() => setHidden(false)}
         animate={{
           y: hidden || forceHidden ? "-100%" : "0%",
         }}
@@ -245,7 +274,7 @@ export default function Navbar({}: NavbarProps) {
         // className={`fixed top-0 left-0 right-0  z-[999999999999]! flex h-[60px] lg:h-[90px] items-center justify-between md:rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,rgba(20,24,30,0.72)_0%,rgba(18,22,28,0.58)_45%,rgba(14,18,24,0.42)_100%)] px-3 lg:px-7 backdrop-blur-[12px] [-webkit-backdrop-filter:blur(12px)] md:w-[90%] md:max-w-[var(--container-max)] md:mx-auto ${
         //   dropdownOpen ? "pointer-events-none" : ""
         // }`}
-        className="fixed top-0 left-0 right-0 z-[999999999999]! flex h-[80px] lg:h-[90px] items-center justify-between md:rounded-b-[20px] border border-t-0 w-full overflow-hidden border-white/12 bg-[linear-gradient(180deg,rgba(20,24,30,0.72)_0%,rgba(18,22,28,0.58)_45%,rgba(14,18,24,0.42)_100%)] px-3! 2xl:px-7! backdrop-blur-[12px] [-webkit-backdrop-filter:blur(12px)] md-fix"
+        className="focus-light fixed top-0 left-0 right-0 z-[999999999999]! flex h-[80px] lg:h-[90px] items-center justify-between md:rounded-b-[20px] border border-t-0 w-full overflow-hidden border-white/12 bg-[linear-gradient(180deg,rgba(20,24,30,0.72)_0%,rgba(18,22,28,0.58)_45%,rgba(14,18,24,0.42)_100%)] px-3! 2xl:px-7! backdrop-blur-[12px] [-webkit-backdrop-filter:blur(12px)] md-fix"
       >
         {/* Logo */}
         <div className="flex shrink-0 items-center">
@@ -279,6 +308,7 @@ export default function Navbar({}: NavbarProps) {
                   className={`${NAV_LINK_CLASS} flex items-center gap-1 cursor-pointer bg-transparent border-none p-0`}
                   onClick={() => toggleDropdown(link.dropdown!)}
                   aria-expanded={openDropdown === link.dropdown}
+                  aria-controls="nav-dropdown-panel"
                 >
                   {link.label}
                   <svg
@@ -304,7 +334,8 @@ export default function Navbar({}: NavbarProps) {
               <Link
                 key={link.label}
                 href={link.href}
-                className={NAV_LINK_CLASS}
+                aria-current={pathname === link.href ? "page" : undefined}
+                className={`${NAV_LINK_CLASS} ${pathname === link.href ? "underline underline-offset-8" : ""}`}
                 target={link.newTab ? "_blank" : undefined}
                 rel={link.newTab ? "noopener noreferrer" : undefined}
               >
@@ -369,6 +400,12 @@ export default function Navbar({}: NavbarProps) {
           below the nav row (ParksDropdown vs MediaDropdown) differs. */}
       <div
         ref={dropdownLayerRef}
+        id="nav-dropdown-panel"
+        onBlur={(e) => {
+          // Close the panel once keyboard focus leaves it.
+          const next = e.relatedTarget as Node | null;
+          if (next && !e.currentTarget.contains(next)) closeDropdown();
+        }}
         className="fixed top-0 left-0 fix right-0  z-[9999999999999]! hidden min-[1200px]:block"
       >
         <AnimatePresence initial={false}>
@@ -389,7 +426,10 @@ export default function Navbar({}: NavbarProps) {
               }`}
             >
               {/* White nav row — mirrors the dark navbar's row, dark-text variant */}
-              <div className="flex h-[60px] lg:h-[90px] items-center justify-between 2xl:px-7 px-3">
+              <div
+                data-white-nav-row
+                className="flex h-[60px] lg:h-[90px] items-center justify-between 2xl:px-7 px-3"
+              >
                 <div className="flex shrink-0 items-center">
                   <Link href="/" onClick={closeDropdown}>
                     <img
@@ -437,7 +477,8 @@ export default function Navbar({}: NavbarProps) {
                         key={link.label}
                         href={link.href}
                         onClick={closeDropdown}
-                        className={WHITE_NAV_LINK_CLASS}
+                        aria-current={pathname === link.href ? "page" : undefined}
+                        className={`${WHITE_NAV_LINK_CLASS} ${pathname === link.href ? "underline underline-offset-8" : ""}`}
                         target={link.newTab ? "_blank" : undefined}
                         rel={link.newTab ? "noopener noreferrer" : undefined}
                       >
@@ -596,6 +637,10 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
   // is ever open at a time.
   const [openMobileKey, setOpenMobileKey] = useState<DropdownKey | null>(null);
   const [openCity, setOpenCity] = useState<string | null>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  // Focus into the drawer, keep Tab inside, return focus to the menu
+  // button on close (Escape is already handled by the Navbar).
+  useDialogA11y(drawerRef, true);
 
   const toggleMobileDropdown = (key: DropdownKey) => {
     setOpenMobileKey((current) => {
@@ -607,6 +652,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
+      ref={drawerRef}
       id="mobile-menu"
       role="dialog"
       aria-modal="true"
@@ -638,7 +684,10 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Links */}
-      <div className="flex flex-1 flex-col justify-center px-6">
+      <nav
+        aria-label="Main"
+        className="flex flex-1 flex-col justify-center px-6"
+      >
         {NAV_LINKS.map((link, index) => {
           if (link.dropdown === "parks") {
             const isOpen = openMobileKey === "parks";
@@ -666,7 +715,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                     className={`flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${
                       isOpen
                         ? "border-[#59624D] bg-[#59624D] text-white"
-                        : "border-[#8F8F8F] text-[#8F8F8F] group-hover:border-[#59624D] group-hover:bg-[#59624D] group-hover:text-white"
+                        : "border-[#636363] text-[#636363] group-hover:border-[#59624D] group-hover:bg-[#59624D] group-hover:text-white"
                     }`}
                   >
                     <ChevronDown
@@ -714,7 +763,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                                 {group.city}
                                 <ChevronDown
                                   size={14}
-                                  className={`text-[#8F8F8F] transition-transform duration-300 ${
+                                  className={`text-[#636363] transition-transform duration-300 ${
                                     isCityOpen ? "rotate-180" : ""
                                   }`}
                                 />
@@ -804,7 +853,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                     className={`flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${
                       isOpen
                         ? "border-[#59624D] bg-[#59624D] text-white"
-                        : "border-[#8F8F8F] text-[#8F8F8F] group-hover:border-[#59624D] group-hover:bg-[#59624D] group-hover:text-white"
+                        : "border-[#636363] text-[#636363] group-hover:border-[#59624D] group-hover:bg-[#59624D] group-hover:text-white"
                     }`}
                   >
                     <ChevronDown
@@ -868,7 +917,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
             </motion.div>
           );
         })}
-      </div>
+      </nav>
 
       {/* Bottom action */}
       <div className="shrink-0 px-6 pb-8 pt-4">

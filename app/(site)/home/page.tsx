@@ -59,7 +59,7 @@ export default async function Home() {
   const insightPosts = await fetchHomeInsightPosts();
 
   return (
-    <main>
+    <div>
       <ScrollToTopOnLoad />
       <Hero />
       <About />
@@ -76,6 +76,6 @@ export default async function Home() {
       ) : (
         <Insights />
       )}
-    </main>
+    </div>
   );
 }

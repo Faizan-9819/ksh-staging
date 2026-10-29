@@ -200,6 +200,7 @@ export default function InteractiveMapSection({
       id="interactive-map"
       className="relative w-full font-sans text-[#535353]"
     >
+      <h2 className="sr-only">Location &amp; Connectivity</h2>
       {/* Header Container - Smooth white gradient overlay onto map area */}
       <div className="absolute top-0 left-0 w-full z-20 pointer-events-none bg-gradient-to-b from-white via-white/80 to-transparent pt-2 pb-10">
         <div className="pointer-events-auto">

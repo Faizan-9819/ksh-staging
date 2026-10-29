@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Navbar from "@/components/ui/Navbar";
 
 export default function InvestorHero() {
   return (
@@ -43,7 +42,6 @@ export default function InvestorHero() {
 
       {/* Navigation */}
       <div className="relative w-full z-[5] pt-safe-top">
-        <Navbar margin="var(--margin)" />
       </div>
 
       {/* Watermark Text Container - Positioned to the absolute rightmost edge */}

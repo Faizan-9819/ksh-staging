@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Navbar from "@/components/ui/Navbar";
 
 export default function ContactHero() {
   return (
@@ -42,7 +41,6 @@ export default function ContactHero() {
       />
 
       {/* Navigation */}
-      <Navbar />
 
       {/* Watermark Text Container - Positioned to the absolute rightmost edge */}
       <div className="absolute bottom-0 right-0 z-[3] flex justify-end pointer-events-none overflow-hidden w-full">

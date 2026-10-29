@@ -419,7 +419,12 @@ export default function CaseStudies() {
             return (
               <div
                 key={cd.brand}
+                // Focusable so keyboard users can expand a collapsed card the
+                // same way hover does (plain tabIndex, not role="button" —
+                // the expanded card contains its own link button).
+                tabIndex={0}
                 onMouseEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
                 className={`relative h-full transition-all duration-500 ease-[0.4,0,0.2,1] rounded-[20px] overflow-hidden cursor-pointer shadow-[0_24px_55px_-38px_rgba(15,29,58,0.5)] ${
                   on ? "w-[65%] min-w-[50%]" : "w-[10%] min-w-[7%]"
                 }`}

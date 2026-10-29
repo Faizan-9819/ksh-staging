@@ -1233,7 +1233,7 @@ export default function KshInfraSection() {
               transform: `scale(${scale})`,
             }}
           >
-            <h1
+            <h2
               className="absolute top-[80px] left-0 text-center m-0 text-[44px] leading-[1.15] font-[600] tracking-[-0.02em]"
               style={{
                 width: CANVAS_W,
@@ -1243,7 +1243,7 @@ export default function KshInfraSection() {
               KSH INFRA is well positioned as an
               <br />
               Integrated Fund &amp; Development Manager
-            </h1>
+            </h2>
 
             <RingLayer />
             <BeamLayer />

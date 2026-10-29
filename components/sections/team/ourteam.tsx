@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Navbar from "@/components/ui/Navbar";
 
 export default function TeamSpot() {
   return (
@@ -46,7 +45,6 @@ export default function TeamSpot() {
       {/* Navigation */}
 
       <div className="relative w-full z-[5] pt-safe-top">
-        <Navbar margin="var(--margin)" />
       </div>
 
       {/* Watermark Text Container - Flush Right with Exact Linear Gradient Fade Style */}

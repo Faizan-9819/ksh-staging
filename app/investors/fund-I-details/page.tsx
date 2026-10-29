@@ -19,7 +19,7 @@ export default function AifFundDetailsPage() {
     <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       <Hero />
 
-      <main className="flex-1">
+      <div className="flex-1">
         <Intro />
         <VehicleAndWhyKsh />
         <KeyHighlights />
@@ -28,7 +28,7 @@ export default function AifFundDetailsPage() {
         <Lifecycle />
         {/* 6. Investment criteria + Risk & governance — currently disabled, see components/AifComponents/FundDetails/InvestmentCriteria.tsx */}
         {/* <CTA /> */}
-      </main>
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Btn from "../../ui/Btn";
+import CustomSelect from "../../ui/CustomSelect";
 
 const NAME_REGEX = /^[a-zA-Z\s]{2,}$/;
 const PHONE_REGEX = /^\d{7,15}$/;
@@ -13,6 +14,8 @@ const VALID_FILE_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const ATTACH_LABEL_CLASS_NAME =
+  "focus-ring-within cursor-pointer inline-flex items-center gap-1.5 rounded-sm text-[#212121] hover:text-[#59624D] transition-colors";
 
 interface DepartmentOption {
   value: string;
@@ -34,112 +37,34 @@ interface DepartmentSelectProps {
   disabled?: boolean;
 }
 
-// Chrome renders a native <select>'s option hover/highlight color at the OS
-// level — no CSS (not even `!important` + inset box-shadow tricks) can
-// override it. A fully custom-rendered listbox is the only way to guarantee
-// the beige hover shows up instead of the browser-default blue.
 function DepartmentSelect({
   value,
   onChange,
   disabled,
 }: DepartmentSelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
-
-  const selected = DEPARTMENT_OPTIONS.find((opt) => opt.value === value);
-
   return (
-    <div ref={containerRef} className="relative w-full">
-      <input type="hidden" name="user_department" value={value} />
-
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        className="w-full h-12 px-4 rounded-lg bg-white text-left outline-none border border-transparent focus:border-[#59624D] transition-all flex items-center justify-between disabled:cursor-not-allowed cursor-pointer"
-        style={{
-          fontFamily: "var(--font-inter), Inter, sans-serif",
-          fontSize: "14px",
-          color: selected ? "#212121" : "#868686",
-        }}
-      >
-        <span className="truncate">
-          {selected ? selected.label : "Select Department"}
-        </span>
-        <svg
-          width="14"
-          height="8"
-          viewBox="0 0 14 8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={`shrink-0 ml-2 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        >
-          <path
-            d="M1 1L7 7L13 1"
-            stroke="#868686"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-
-      {isOpen && (
-        <ul
-          role="listbox"
-          className="absolute z-50 top-full left-0 mt-0 w-full rounded-lg bg-white border border-[#E5E0D8] shadow-lg py-1"
-        >
-          {DEPARTMENT_OPTIONS.map((opt) => {
-            const isSelected = opt.value === value;
-            return (
-              <li
-                key={opt.value}
-                role="option"
-                aria-selected={isSelected}
-                onClick={() => {
-                  onChange(opt.value);
-                  setIsOpen(false);
-                }}
-                className={`px-4 py-1.5 cursor-pointer transition-colors hover:bg-[#E2DED5] ${
-                  isSelected ? "font-medium text-[#212121]" : "text-[#212121]"
-                }`}
-                style={{
-                  fontFamily: "var(--font-inter), Inter, sans-serif",
-                  fontSize: "16px",
-                }}
-              >
-                {opt.label}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+    <CustomSelect
+      name="user_department"
+      options={DEPARTMENT_OPTIONS}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      placeholder="Select Department"
+      triggerClassName={`w-full h-12 px-4 rounded-lg bg-white text-left border border-transparent focus:border-[#59624D] transition-all flex items-center justify-between ${
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      }`}
+      triggerStyle={{
+        fontFamily: "var(--font-inter), Inter, sans-serif",
+        fontSize: "14px",
+        color: value ? "#212121" : "#868686",
+      }}
+      listClassName="absolute z-50 top-full left-0 mt-0 w-full rounded-lg bg-white border border-[#E5E0D8] shadow-lg py-1"
+      optionClassName="px-4 py-1.5"
+      optionStyle={{
+        fontFamily: "var(--font-inter), Inter, sans-serif",
+        fontSize: "16px",
+      }}
+    />
   );
 }
 
@@ -502,9 +427,11 @@ export default function CareerFormSection() {
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
                 {/* Attachment Links */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6">
-                  {/* Attach CV */}
+                  {/* Attach CV — inputs are sr-only (not display:none) so
+                      they stay in the keyboard tab order; the label shows
+                      the focus ring since the input itself is invisible. */}
                   <div>
-                    <label className="cursor-pointer inline-flex items-center gap-1.5 text-[#212121] hover:text-[#59624D] transition-colors">
+                    <label className={ATTACH_LABEL_CLASS_NAME}>
                       <span
                         style={{
                           fontFamily: "var(--font-inter), Inter, sans-serif",
@@ -518,7 +445,7 @@ export default function CareerFormSection() {
                         type="file"
                         name="attachment"
                         accept=".pdf,.doc,.docx"
-                        className="hidden"
+                        className="sr-only"
                         onChange={handleCvChange}
                         disabled={isSending}
                       />
@@ -530,7 +457,7 @@ export default function CareerFormSection() {
 
                   {/* Attach Cover Letter */}
                   <div>
-                    <label className="cursor-pointer inline-flex items-center gap-1.5 text-[#212121] hover:text-[#59624D] transition-colors">
+                    <label className={ATTACH_LABEL_CLASS_NAME}>
                       <span
                         style={{
                           fontFamily: "var(--font-inter), Inter, sans-serif",
@@ -547,7 +474,7 @@ export default function CareerFormSection() {
                         type="file"
                         name="cover_letter"
                         accept=".pdf,.doc,.docx"
-                        className="hidden"
+                        className="sr-only"
                         onChange={handleCoverLetterChange}
                         disabled={isSending}
                       />

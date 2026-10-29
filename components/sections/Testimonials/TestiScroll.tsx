@@ -80,8 +80,10 @@ function TestiScroll() {
       aria-label="Our solutions"
       className="relative w-full bg-[#f8f8f8] py-16 md:py-24 lg:py-32"
     >
+      <h2 className="sr-only">Client testimonials</h2>
       <div className="fix flex flex-col gap-10 md:flex-row md:items-start md:gap-10 lg:gap-14">
         <SolutionsSidebar
+          ariaLabel="Clients"
           items={SOLUTIONS_TIMELINE_DATA}
           activeIndex={activeIndex}
           onSelect={handleSelect}

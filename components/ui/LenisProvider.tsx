@@ -291,7 +291,33 @@ function LenisInner({ children }: { children: React.ReactNode }) {
     });
     resizeObserver.observe(document.body);
 
+    // Tabbing to an off-screen element makes the browser scroll natively,
+    // but Lenis keeps its old target and eases back to it, and the pinned
+    // sections (ScrollFrames, Map) can shift layout as they settle. So for a
+    // short window after keyboard focus, keep the focused element on screen
+    // and keep Lenis's target on that position.
+    const onFocusIn = (e: FocusEvent) => {
+      const el = e.target;
+      if (!(el instanceof Element) || !el.matches(":focus-visible")) return;
+      const ensure = () => {
+        if (document.activeElement !== el || lenis.isStopped) return;
+        const r = el.getBoundingClientRect();
+        if (!r.width && !r.height) return;
+        const vh = window.innerHeight;
+        let y = window.scrollY;
+        if (r.top < 0 || r.bottom > vh) {
+          y += r.height > vh ? r.top - 80 : r.top - (vh - r.height) / 2;
+        }
+        lenis.scrollTo(y, { immediate: true, force: true });
+      };
+      requestAnimationFrame(ensure);
+      setTimeout(ensure, 150);
+      setTimeout(ensure, 500);
+    };
+    document.addEventListener("focusin", onFocusIn);
+
     return () => {
+      document.removeEventListener("focusin", onFocusIn);
       cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
       lenis.destroy();

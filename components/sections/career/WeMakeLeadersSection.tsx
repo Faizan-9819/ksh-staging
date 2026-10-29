@@ -38,7 +38,7 @@ export default function WeMakeLeadersSection() {
       const spans = el.querySelectorAll<HTMLSpanElement>("span[data-w]");
       const fill = p * spans.length;
       spans.forEach((s, i) => {
-        s.style.color = i < fill ? "#212121" : "#BDAEA6";
+        s.style.color = i < fill ? "#212121" : "#64635D";
       });
     };
 
@@ -115,12 +115,12 @@ export default function WeMakeLeadersSection() {
             <div>
               {/* Title Container: word-by-word scroll color fill, same as OverviewAbout */}
               <h2 className="m-0 max-w-[439px] font-sora font-semibold text-[22px] xs:text-[26px] sm:text-[32px] xl:text-[34px] 2xl:text-[40px] leading-[1.15] tracking-[-0.8px]">
-                <span ref={greyRef} className="block text-[#BDAEA6]">
+                <span ref={greyRef} className="block text-[#64635D]">
                   {HEADING_WORDS.map((word, i) => (
                     <React.Fragment key={i}>
                       <span
                         data-w="1"
-                        className="text-[#BDAEA6] [transition:color_.5s_ease] font-semibold inline-block"
+                        className="text-[#64635D] [transition:color_.5s_ease] font-semibold inline-block"
                       >
                         {word}
                       </span>

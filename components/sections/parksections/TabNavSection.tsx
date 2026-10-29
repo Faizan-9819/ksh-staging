@@ -112,7 +112,7 @@ export default function TabNavSection({
   const activeItem = navItems[active];
 
   return (
-    <nav className="top-0 z-30 w-full bg-[#fbf2e8]" data-name="Sticky Sub-Nav">
+    <nav aria-label="Park sections" className="top-0 z-30 w-full bg-[#fbf2e8]" data-name="Sticky Sub-Nav">
       <div className="fix flex flex-col justify-center gap-4 sm:gap-5 lg:gap-[15px] py-[22px] sm:py-[32px] lg:py-[44px]">
         {/* Tick ruler — desktop/tablet only, replaced by a dropdown below sm */}
         <div className="hidden sm:flex items-center justify-between">
@@ -132,10 +132,12 @@ export default function TabNavSection({
         <div className="hidden sm:flex items-center justify-between lg:max-xl:gap-x-4">
           {navItems.map((item, i) => (
             <button
+              type="button"
               key={i}
+              aria-current={i === active ? "true" : undefined}
               onClick={() => handleClick(i, item)}
               className={`whitespace-nowrap bg-transparent border-none cursor-pointer font-sora font-normal text-[17px] lg:text-[16px] xl:text-[20px] leading-[1.4] transition-colors duration-300 ${
-                i === active ? "text-[#212121]" : "text-[#bdaea6]"
+                i === active ? "text-[#212121] underline underline-offset-8" : "text-[#bdaea6]"
               }`}
               dangerouslySetInnerHTML={{ __html: item.label }}
             />
@@ -145,6 +147,8 @@ export default function TabNavSection({
         {/* Mobile — full-width custom dropdown instead of a horizontally scrolling row */}
         <div className="relative sm:hidden">
           <button
+            type="button"
+            aria-expanded={mobileDropdownOpen}
             onClick={() => setMobileDropdownOpen((v) => !v)}
             className="w-full flex items-center justify-between bg-transparent border-none cursor-pointer font-sora font-normal text-[14px] leading-[1.4] text-[#212121]"
           >

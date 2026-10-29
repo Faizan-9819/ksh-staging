@@ -7,10 +7,10 @@ export default function AifContactPage() {
     <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       <Hero />
 
-      <main className="flex-1">
+      <div className="flex-1">
         <Intro />
         <OtherEnquiries />
-      </main>
+      </div>
     </div>
   );
 }

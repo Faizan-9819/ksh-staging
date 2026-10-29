@@ -321,9 +321,9 @@ function FloatingCard({
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
             {VALUES_ITEMS.map((val, idx) => (
               <div key={idx} className="flex flex-col gap-1">
-                <h4 className="text-[13px] lg:text-[15px] font-medium leading-[1.4] text-[#101010]">
+                <h3 className="text-[13px] lg:text-[15px] font-medium leading-[1.4] text-[#101010]">
                   {val.title}
-                </h4>
+                </h3>
                 <p className="text-[11px] lg:text-[13px] leading-[1.4] text-gray-600 font-normal">
                   {val.description}
                 </p>

@@ -50,6 +50,21 @@ div {
 
 /* d */
 
+/* Visible keyboard focus everywhere (WCAG 2.4.7 / 1.4.11). Two-tone ring: a
+   dark outline with a white band in the offset gap, so at least one of the
+   two always contrasts with whatever it sits on — the old single brand-olive
+   outline disappeared on the site's olive buttons and dark sections. */
+:focus-visible,
+.focus-ring-within:focus-within {
+  outline: 2px solid #111111 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #ffffff !important;
+}
+.focus-light :focus-visible {
+  outline-color: #fff !important;
+  box-shadow: 0 0 0 2px #111111 !important;
+}
+
 /* Default Headings Font */
 h1,
 h2,

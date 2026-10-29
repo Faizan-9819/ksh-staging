@@ -174,6 +174,7 @@
 
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -228,6 +229,7 @@ const TimeCard: React.FC<TimeCardProps> = ({ image, content, isAbove }) => {
           MOBILE + TABLET VIEW (lg:hidden) - Full Image with Click Slide-Up Overlay
          ================================================================= */}
       <div
+        {...PRESSABLE}
         onClick={() => setIsOpen((prev) => !prev)}
         className={`${
           isAbove ? "topcard" : "bcard"

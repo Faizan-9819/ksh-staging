@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import HeroVideoToggle from "@/components/ui/HeroVideoToggle";
 
 function HeroSolut() {
   return (
@@ -37,6 +38,8 @@ function HeroSolut() {
         Solutions
       </h1>
       <div className="absolute bottom-0 w-full z-20 lg:h-40 h-[30px] left-0 bg-linear-to-t from-black to-transparent"></div>
+
+      <HeroVideoToggle />
     </section>
   );
 }

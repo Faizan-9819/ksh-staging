@@ -302,9 +302,9 @@ function TestimonialCard({
             ))}
           </div>
 
-          <p className="text-[25px] font-sora tracking-[-0.64px] font-semibold text-[#212121] 2xl:text-[32px]">
+          <h3 className="text-[25px] font-sora tracking-[-0.64px] font-semibold text-[#212121] 2xl:text-[32px]">
             {name}
-          </p>
+          </h3>
           {designation && (
             <p className="mt-1 max-w-[350px] text-[14px] text-[#8C8C84] lg:text-[16px]">
               {designation}

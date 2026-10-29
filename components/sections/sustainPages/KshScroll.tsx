@@ -387,6 +387,7 @@
 //
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Btn from "@/components/ui/Btn";
@@ -476,6 +477,7 @@ const AccordionItem: React.FC<{
   return (
     <div className={`${!isLast ? "border-b border-white/20" : ""}`}>
       <div
+        {...PRESSABLE}
         onClick={onToggle}
         className="flex items-center justify-between gap-4 py-4 lg:py-5 cursor-pointer"
       >

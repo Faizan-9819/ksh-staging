@@ -361,6 +361,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { PRESSABLE } from "@/lib/pressable";
 
 const ITEMS = [
   {
@@ -473,6 +474,8 @@ export default function GrowthSus() {
               return (
                 <div key={it.title} className="border-b border-[#E3E2DD]">
                   <div
+                    {...PRESSABLE}
+                    aria-expanded={on}
                     onClick={() => setActive(i)}
                     className="flex items-start justify-between gap-4 py-5 cursor-pointer"
                   >
@@ -612,7 +615,11 @@ export default function GrowthSus() {
                 return (
                   <div key={it.title} className="border-b border-[#E3E2DD]">
                     <div
+                      {...PRESSABLE}
+                      aria-expanded={on}
                       onClick={() => goTo(i)}
+                      // Tabbing onto a row opens it, same as hovering.
+                      onFocus={() => goTo(i)}
                       onMouseEnter={() => goTo(i)}
                       className="flex items-start justify-between gap-5 py-[clamp(20px,2.2vw,30px)] cursor-pointer"
                     >

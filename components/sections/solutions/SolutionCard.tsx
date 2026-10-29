@@ -1,11 +1,12 @@
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   AnimatePresence,
   motion,
-  useInView,
+  useAnimate,
   useReducedMotion,
 } from "framer-motion";
 import ArrowUpRightIcon from "@/components/ui/ArrowUpRightIcon";
@@ -15,12 +16,14 @@ import type {
   SolutionFeature,
 } from "./solutionsData";
 import SolutionAccordionItem from "./SolutionAccordionItem";
+import { solutionPanelId, solutionTabId } from "./SolutionsSidebar";
 
-const ACTIVE_VIEWPORT_MARGIN = "-45% 0px -45% 0px";
 const CARD_ANIMATE_DURATION_S = 0.6;
 const CARD_ANIMATE_OFFSET_PX = 32;
 const CARD_ANIMATE_VIEWPORT_AMOUNT = 0.3;
 const TAB_CROSSFADE_DURATION_S = 0.35;
+const TAB_SLIDE_DURATION_S = 0.45;
+const TAB_SLIDE_OFFSET_PX = 48;
 const HOVER_ACTIVATION_MIN_WIDTH_PX = 1024;
 
 interface SolutionHoverListProps {
@@ -80,6 +83,7 @@ function SolutionHoverList({
         return (
           <div
             key={item.title}
+            {...PRESSABLE}
             onClick={() => onActivate(itemIndex)}
             onMouseEnter={() => {
               if (
@@ -168,21 +172,29 @@ function FeatureList({ features }: { features: SolutionFeature[] }) {
 
 interface SolutionCardProps {
   data: SolutionCardData;
-  index: number;
-  onActiveChange: (index: number) => void;
+  /** Selected in the sidebar tabs; inactive cards are hidden from md up. */
+  isActive: boolean;
 }
 
-function SolutionCard({ data, index, onActiveChange }: SolutionCardProps) {
-  const ref = useRef<HTMLElement>(null);
-  const isCentered = useInView(ref, {
-    margin: ACTIVE_VIEWPORT_MARGIN,
-    once: false,
-  });
+function SolutionCard({ data, isActive }: SolutionCardProps) {
   const prefersReducedMotion = useReducedMotion();
 
+  // Slide the card in each time its sidebar tab is clicked (not on first
+  // render — the article's own whileInView entrance covers that).
+  const [tabScope, animateTab] = useAnimate<HTMLDivElement>();
+  const hasMountedRef = useRef(false);
   useEffect(() => {
-    if (isCentered) onActiveChange(index);
-  }, [isCentered, index, onActiveChange]);
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    if (!isActive || prefersReducedMotion || !tabScope.current) return;
+    animateTab(
+      tabScope.current,
+      { opacity: [0, 1], x: [TAB_SLIDE_OFFSET_PX, 0] },
+      { duration: TAB_SLIDE_DURATION_S, ease: "easeOut" },
+    );
+  }, [isActive, prefersReducedMotion, animateTab, tabScope]);
 
   const [activeButtonLabel, setActiveButtonLabel] = useState(
     () =>
@@ -208,164 +220,168 @@ function SolutionCard({ data, index, onActiveChange }: SolutionCardProps) {
   const simpleLayoutImageAlt = activeHoverItem?.imageAlt ?? data.imageAlt;
 
   return (
-    <motion.article
-      ref={ref}
-      id={`solution-${data.id}`}
-      initial={
-        prefersReducedMotion ? false : { opacity: 0, y: CARD_ANIMATE_OFFSET_PX }
-      }
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: CARD_ANIMATE_VIEWPORT_AMOUNT }}
-      transition={{ duration: CARD_ANIMATE_DURATION_S, ease: "easeOut" }}
-      className={`scroll-mt-28 rounded-[28px] p-5 sm:p-8 md:p-10 lg:p-14 ${
-        isBeige ? "bg-[#FBF2E8]" : "bg-white"
-      }`}
-    >
-      {/* Mobile-only Eyebrow Heading */}
-      <div className="mb-4 md:hidden">
-        <p className="mb-2 text-[13px] font-medium tracking-[0.15em] text-[#8C8C84]">
-          {data.index}/05
-        </p>
-        <h3 className="text-[26px] font-bold leading-tight text-[#212121]">
-          {data.title}
-        </h3>
-      </div>
-
-      {isFeaturePanel ? (
-        <>
-          <h3 className="mb-4 hidden text-[28px] font-bold leading-tight text-[#212121] md:block lg:text-[34px]">
+    <div ref={tabScope} className={isActive ? "" : "md:hidden"}>
+      <motion.article
+        id={solutionPanelId(data.id)}
+        role="tabpanel"
+        aria-labelledby={solutionTabId(data.id)}
+        initial={
+          prefersReducedMotion
+            ? false
+            : { opacity: 0, y: CARD_ANIMATE_OFFSET_PX }
+        }
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: CARD_ANIMATE_VIEWPORT_AMOUNT }}
+        transition={{ duration: CARD_ANIMATE_DURATION_S, ease: "easeOut" }}
+        className={`scroll-mt-28 rounded-[28px] p-5 sm:p-8 md:p-10 lg:p-14 ${
+          isBeige ? "bg-[#FBF2E8]" : "bg-white"
+        }`}
+      >
+        {/* Mobile-only Eyebrow Heading */}
+        <div className="mb-4 md:hidden">
+          <p className="mb-2 text-[13px] font-medium tracking-[0.15em] text-[#8C8C84]">
+            {data.index}/05
+          </p>
+          <h3 className="text-[26px] font-bold leading-tight text-[#212121]">
             {data.title}
           </h3>
-          <p className="mb-4 text-[16px] font-medium text-[#212121] lg:text-[18px]">
-            {data.subtitle}
-          </p>
-          <div className="mb-8 flex flex-col gap-4 lg:mb-10">
-            {data.description.map((paragraph, paragraphIndex) => (
-              <p
-                key={paragraphIndex}
-                className="text-[14px] leading-relaxed text-[#4A4A4A] lg:text-[15px]"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
+        </div>
 
-          <div className="flex flex-col gap-8 md:flex-row md:items-stretch md:gap-10 lg:gap-14">
-            <div className="relative min-h-[280px] w-full shrink-0 overflow-hidden rounded-[20px] md:aspect-auto md:min-h-[320px] md:w-[42%]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={displayedImage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: TAB_CROSSFADE_DURATION_S }}
-                  className="absolute inset-0"
+        {isFeaturePanel ? (
+          <>
+            <h3 className="mb-4 hidden text-[28px] font-bold leading-tight text-[#212121] md:block lg:text-[34px]">
+              {data.title}
+            </h3>
+            <p className="mb-4 text-[16px] font-medium text-[#212121] lg:text-[18px]">
+              {data.subtitle}
+            </p>
+            <div className="mb-8 flex flex-col gap-4 lg:mb-10">
+              {data.description.map((paragraph, paragraphIndex) => (
+                <p
+                  key={paragraphIndex}
+                  className="text-[14px] leading-relaxed text-[#4A4A4A] lg:text-[15px]"
                 >
-                  <Image
-                    src={displayedImage}
-                    alt={displayedImageAlt}
-                    fill
-                    sizes="(min-width: 768px) 40vw, 100vw"
-                    className="object-cover"
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
+                  {paragraph}
+                </p>
+              ))}
             </div>
 
-            <div className="flex w-full flex-col gap-6 md:w-[58%]">
-              {data.buttons && (
-                <SolutionButtonGroup
-                  buttons={data.buttons}
-                  activeLabel={activeButtonLabel}
-                  onSelect={setActiveButtonLabel}
-                />
-              )}
-
-              <AnimatePresence mode="wait">
-                {displayedFeatures && (
+            <div className="flex flex-col gap-8 md:flex-row md:items-stretch md:gap-10 lg:gap-14">
+              <div className="relative min-h-[280px] w-full shrink-0 overflow-hidden rounded-[20px] md:aspect-auto md:min-h-[320px] md:w-[42%]">
+                <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeButtonLabel}
+                    key={displayedImage}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: TAB_CROSSFADE_DURATION_S }}
+                    className="absolute inset-0"
                   >
-                    <FeatureList features={displayedFeatures} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div
-          className={`flex flex-col gap-8 md:items-stretch md:gap-10 lg:gap-14 ${
-            isImageRight ? "md:flex-row-reverse" : "md:flex-row"
-          }`}
-        >
-          {/* Image & Overlay */}
-          <div className="w-full shrink-0 md:w-1/2">
-            <div className="relative aspect-[4/3] min-h-[340px] w-full overflow-hidden rounded-[20px] sm:min-h-[400px] md:aspect-auto md:h-full md:min-h-[440px] lg:min-h-[560px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={simpleLayoutImage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: TAB_CROSSFADE_DURATION_S }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={simpleLayoutImage}
-                    alt={simpleLayoutImageAlt}
-                    fill
-                    sizes="(min-width: 768px) 45vw, 100vw"
-                    className="object-cover"
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              {data.imageCaption && (
-                <div className="absolute inset-x-3 bottom-3 flex flex-col gap-3 rounded-[16px] bg-black/55 p-4 backdrop-blur-sm sm:inset-x-4 sm:bottom-4 sm:p-5 md:bottom-6 md:left-6 md:right-6 md:inset-x-auto md:max-w-[260px]">
-                  {data.imageCaption.map((entry) => (
-                    <div key={entry.title}>
-                      <p className="mb-1 text-[14px] font-semibold text-white">
-                        {entry.title}
-                      </p>
-                      <p className="text-[12px] leading-relaxed text-white/80 sm:text-[13px]">
-                        {entry.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {activeHoverItem && (
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeHoverItem.title}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: TAB_CROSSFADE_DURATION_S }}
-                    className="absolute inset-x-3 bottom-3 max-h-[85%] overflow-y-auto rounded-[18px] border border-black/10 bg-[linear-gradient(160deg,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0.15)_100%)] p-3.5 text-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.25)] backdrop-blur-[16px] [-webkit-backdrop-filter:blur(16px)] sm:inset-x-4 sm:bottom-4 sm:p-5 md:bottom-6 md:inset-x-6"
-                  >
-                    <p className="mb-1 text-[14px] font-semibold text-white sm:text-[15px]">
-                      {activeHoverItem.title}
-                    </p>
-                    <p className="whitespace-pre-line text-[11px] leading-relaxed text-white/90 sm:text-[13px]">
-                      {activeHoverItem.description}
-                    </p>
+                    <Image
+                      src={displayedImage}
+                      alt={displayedImageAlt}
+                      fill
+                      sizes="(min-width: 768px) 40vw, 100vw"
+                      className="object-cover"
+                      priority
+                    />
                   </motion.div>
                 </AnimatePresence>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* Content Column (Includes Subtitle, Description, Accordion & Hover List) */}
-          {/* <div className="w-full md:w-1/2">
+              <div className="flex w-full flex-col gap-6 md:w-[58%]">
+                {data.buttons && (
+                  <SolutionButtonGroup
+                    buttons={data.buttons}
+                    activeLabel={activeButtonLabel}
+                    onSelect={setActiveButtonLabel}
+                  />
+                )}
+
+                <AnimatePresence mode="wait">
+                  {displayedFeatures && (
+                    <motion.div
+                      key={activeButtonLabel}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: TAB_CROSSFADE_DURATION_S }}
+                    >
+                      <FeatureList features={displayedFeatures} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div
+            className={`flex flex-col gap-8 md:items-stretch md:gap-10 lg:gap-14 ${
+              isImageRight ? "md:flex-row-reverse" : "md:flex-row"
+            }`}
+          >
+            {/* Image & Overlay */}
+            <div className="w-full shrink-0 md:w-1/2">
+              <div className="relative aspect-[4/3] min-h-[340px] w-full overflow-hidden rounded-[20px] sm:min-h-[400px] md:aspect-auto md:h-full md:min-h-[440px] lg:min-h-[560px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={simpleLayoutImage}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: TAB_CROSSFADE_DURATION_S }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={simpleLayoutImage}
+                      alt={simpleLayoutImageAlt}
+                      fill
+                      sizes="(min-width: 768px) 45vw, 100vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </motion.div>
+                </AnimatePresence>
+
+                {data.imageCaption && (
+                  <div className="absolute inset-x-3 bottom-3 flex flex-col gap-3 rounded-[16px] bg-black/55 p-4 backdrop-blur-sm sm:inset-x-4 sm:bottom-4 sm:p-5 md:bottom-6 md:left-6 md:right-6 md:inset-x-auto md:max-w-[260px]">
+                    {data.imageCaption.map((entry) => (
+                      <div key={entry.title}>
+                        <p className="mb-1 text-[14px] font-semibold text-white">
+                          {entry.title}
+                        </p>
+                        <p className="text-[12px] leading-relaxed text-white/80 sm:text-[13px]">
+                          {entry.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeHoverItem && (
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeHoverItem.title}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: TAB_CROSSFADE_DURATION_S }}
+                      className="absolute inset-x-3 bottom-3 max-h-[85%] overflow-y-auto rounded-[18px] border border-black/10 bg-[linear-gradient(160deg,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0.15)_100%)] p-3.5 text-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.25)] backdrop-blur-[16px] [-webkit-backdrop-filter:blur(16px)] sm:inset-x-4 sm:bottom-4 sm:p-5 md:bottom-6 md:inset-x-6"
+                    >
+                      <p className="mb-1 text-[14px] font-semibold text-white sm:text-[15px]">
+                        {activeHoverItem.title}
+                      </p>
+                      <p className="whitespace-pre-line text-[11px] leading-relaxed text-white/90 sm:text-[13px]">
+                        {activeHoverItem.description}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+              </div>
+            </div>
+
+            {/* Content Column (Includes Subtitle, Description, Accordion & Hover List) */}
+            {/* <div className="w-full md:w-1/2">
             <h3 className="mb-7 hidden text-[28px] font-bold leading-tight text-[#212121] md:block lg:text-[34px]">
               {data.title}
             </h3>
@@ -402,46 +418,47 @@ function SolutionCard({ data, index, onActiveChange }: SolutionCardProps) {
               </div>
             )}
           </div> */}
-          <div className="flex w-full flex-col justify-center md:w-1/2">
-            <h3 className="mb-7 hidden text-[32px] font-semibold leading-tight text-[#212121] md:block lg:text-[34px]">
-              {data.title}
-            </h3>
-            <p className="mb-5 text-[16px] text-[#212121] lg:text-[20px]">
-              {data.subtitle}
-            </p>
+            <div className="flex w-full flex-col justify-center md:w-1/2">
+              <h3 className="mb-7 hidden text-[32px] font-semibold leading-tight text-[#212121] md:block lg:text-[34px]">
+                {data.title}
+              </h3>
+              <p className="mb-5 text-[16px] text-[#212121] lg:text-[20px]">
+                {data.subtitle}
+              </p>
 
-            <div className="flex flex-col gap-4">
-              {data.description.map((paragraph, paragraphIndex) => (
-                <p
-                  key={paragraphIndex}
-                  className="text-[14px] leading-relaxed text-[#4A4A4A] lg:text-[15px]"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-
-            {data.accordion && (
-              <div className="mt-8 flex flex-col">
-                {data.accordion.map((entry) => (
-                  <SolutionAccordionItem key={entry.title} item={entry} />
+              <div className="flex flex-col gap-4">
+                {data.description.map((paragraph, paragraphIndex) => (
+                  <p
+                    key={paragraphIndex}
+                    className="text-[14px] leading-relaxed text-[#4A4A4A] lg:text-[15px]"
+                  >
+                    {paragraph}
+                  </p>
                 ))}
               </div>
-            )}
 
-            {data.hoverPanel && (
-              <div className="mt-8">
-                <SolutionHoverList
-                  items={data.hoverPanel}
-                  activeIndex={activeHoverIndex}
-                  onActivate={setActiveHoverIndex}
-                />
-              </div>
-            )}
+              {data.accordion && (
+                <div className="mt-8 flex flex-col">
+                  {data.accordion.map((entry) => (
+                    <SolutionAccordionItem key={entry.title} item={entry} />
+                  ))}
+                </div>
+              )}
+
+              {data.hoverPanel && (
+                <div className="mt-8">
+                  <SolutionHoverList
+                    items={data.hoverPanel}
+                    activeIndex={activeHoverIndex}
+                    onActivate={setActiveHoverIndex}
+                  />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </motion.article>
+        )}
+      </motion.article>
+    </div>
   );
 }
 

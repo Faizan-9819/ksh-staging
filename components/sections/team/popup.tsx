@@ -98,6 +98,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { FaLinkedinIn } from "react-icons/fa";
+import { useDialogA11y } from "@/components/ui/useDialogA11y";
 
 type PopupProps = {
   open: boolean;
@@ -112,6 +113,9 @@ type PopupProps = {
 };
 
 export default function Popup({ onClose, member }: PopupProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Escape is handled below; this adds focus-in, Tab trap and focus return.
+  useDialogA11y(dialogRef, !!member);
   const descRef = useRef<HTMLParagraphElement>(null);
   const [showFade, setShowFade] = useState(false);
 
@@ -174,11 +178,18 @@ export default function Popup({ onClose, member }: PopupProps) {
           duration: 0.45,
           ease: [0.22, 1, 0.36, 1],
         }}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="team-popup-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-[860px] rounded-[20px] bg-white px-6 pt-16 pb-8 lg:px-10 lg:py-10 shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
       >
         {/* Close Button */}
         <button
+          type="button"
+          aria-label="Close"
           onClick={onClose}
           className="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-[#F5F5F5] text-[#A8A8A8] transition-colors hover:bg-[#EBEBEB] lg:right-6 lg:top-6"
         >
@@ -186,7 +197,9 @@ export default function Popup({ onClose, member }: PopupProps) {
         </button>
 
         {/* Name */}
-        <h2 className="text-[28px] font-medium leading-[140%] text-[#212121] lg:text-[33px]">
+        <h2
+          id="team-popup-title"
+          className="text-[28px] font-medium leading-[140%] text-[#212121] lg:text-[33px]">
           {member.name}
         </h2>
 

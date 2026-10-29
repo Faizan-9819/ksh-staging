@@ -69,7 +69,8 @@
 // }
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useDialogA11y } from "@/components/ui/useDialogA11y";
 import { motion, AnimatePresence } from "framer-motion";
 import { stopLenis, startLenis } from "@/components/ui/LenisProvider";
 
@@ -161,6 +162,7 @@ export default function LocationOverviewSection({
     content.popupTabs[0].id,
   );
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const openModal = (tabId?: string) => {
     setActiveTabId(tabId || content.popupTabs[0].id);
@@ -171,6 +173,7 @@ export default function LocationOverviewSection({
     setIsOpen(false);
     setMobileDropdownOpen(false);
   };
+  useDialogA11y(dialogRef, isOpen, closeModal);
 
   useEffect(() => {
     // Early-return guard rather than an if/open-else-closed startLenis() —
@@ -202,6 +205,7 @@ export default function LocationOverviewSection({
             dangerouslySetInnerHTML={{ __html: content.heading }}
           />
         </div> */}
+        <h2 className="sr-only">Park Highlights</h2>
 
         <div className="flex flex-col lg:flex-row items-start justify-between gap-[40px] lg:gap-[24px]">
           {/* Left column — image (Clickable trigger for popup) */}
@@ -215,7 +219,14 @@ export default function LocationOverviewSection({
               className="w-full h-full object-cover"
             />
             <div className="w-full flex justify-end -mt-10 relative z-[400]">
-              <button className="py-3 border rounded-4xl px-7 cursor-pointer! hover:bg-[#59624D] transition-all duration-[300ms] border-[#59624D] text-[#59624D] hover:text-[#ffffff]">
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openModal();
+                }}
+                className="py-3 border rounded-4xl px-7 cursor-pointer! hover:bg-[#59624D] transition-all duration-[300ms] border-[#59624D] text-[#59624D] hover:text-[#ffffff]">
                 View Overview
               </button>
             </div>
@@ -251,6 +262,11 @@ export default function LocationOverviewSection({
 
             {/* Modal Box */}
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Park overview"
+              tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -259,6 +275,7 @@ export default function LocationOverviewSection({
             >
               {/* Close Button */}
               <button
+                type="button"
                 onClick={closeModal}
                 className="absolute right-5 lg:right-8 top-5 lg:top-9 z-50 p-2 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
                 aria-label="Close modal"
@@ -284,11 +301,13 @@ export default function LocationOverviewSection({
                 <div className="hidden sm:flex items-center justify-center gap-3">
                   {content.popupTabs.map((tab) => (
                     <button
+                      type="button"
                       key={tab.id}
+                      aria-pressed={activeTabId === tab.id}
                       onClick={() => setActiveTabId(tab.id)}
                       className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-sora font-medium transition-all duration-200 cursor-pointer ${
                         activeTabId === tab.id
-                          ? "bg-[#59624d] text-white shadow-sm"
+                          ? "bg-[#59624d] text-white shadow-sm underline underline-offset-4"
                           : "border border-[#9e9e9e]/60 text-[#616161] hover:border-[#59624d] bg-white"
                       }`}
                       dangerouslySetInnerHTML={{ __html: tab.label }}
@@ -299,6 +318,8 @@ export default function LocationOverviewSection({
                 {/* Custom green dropdown below sm, matching the map section's mobile selector */}
                 <div className="relative w-full sm:hidden px-8">
                   <button
+                    type="button"
+                    aria-expanded={mobileDropdownOpen}
                     onClick={() => setMobileDropdownOpen((v) => !v)}
                     className="w-full flex items-center justify-between px-5 py-2.5 text-xs font-sora font-medium cursor-pointer rounded-full bg-[#59624d] text-white shadow-sm"
                   >
@@ -354,6 +375,7 @@ export default function LocationOverviewSection({
                     src={activeTab.media.src}
                     controls
                     autoPlay
+                    muted
                     loop
                     playsInline
                     className="w-full h-full object-cover rounded-2xl"

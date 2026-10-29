@@ -109,9 +109,9 @@ export default function VehicleAndWhyKsh() {
     <section className="bg-[#FBF2E8]">
       <div className="fix flex flex-col py-16 lg:py-[90px] lg:flex-row lg:gap-[50px]">
         <div className="w-full lg:w-[580px]">
-          <h3 className="font-sora text-2xl font-semibold leading-[1.2] tracking-[-0.02em] text-[#212121] sm:text-[28px]">
+          <h2 className="font-sora text-2xl font-semibold leading-[1.2] tracking-[-0.02em] text-[#212121] sm:text-[28px]">
             Meet the Fund Manager
-          </h3>
+          </h2>
 
           {/* 2. Fund Manager */}
           <section className="mt-6 max-w-[580px]">
@@ -126,9 +126,9 @@ export default function VehicleAndWhyKsh() {
           </section>
         </div>
         <div className="mt-12 lg:mt-0 lg:flex-1">
-          <h4 className="mb-4 font-sora text-lg font-semibold leading-[1.2] tracking-[-0.02em] text-[#212121] sm:text-xl">
+          <h2 className="mb-4 font-sora text-lg font-semibold leading-[1.2] tracking-[-0.02em] text-[#212121] sm:text-xl">
             KSH INFRA - Where Capital Meets Capability
-          </h4>
+          </h2>
           <ul className="m-0 list-none p-0">
             {WHY_KSH.map((item, i) => (
               <li

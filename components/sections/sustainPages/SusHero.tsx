@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import HeroVideoToggle from "@/components/ui/HeroVideoToggle";
 
 function About() {
   return (
@@ -51,6 +52,8 @@ function About() {
 
       {/* Bottom Gradient Overlay */}
       <div className="absolute bottom-0 w-full z-20 lg:h-[120px]! h-[20px]! left-0 bg-linear-to-t from-black to-transparent pointer-events-none"></div>
+
+      <HeroVideoToggle />
     </section>
   );
 }

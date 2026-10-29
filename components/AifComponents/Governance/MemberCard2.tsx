@@ -1,3 +1,4 @@
+import { PRESSABLE } from "@/lib/pressable";
 import { FaLinkedinIn } from "react-icons/fa";
 
 export default function MemberCard2({
@@ -15,7 +16,7 @@ export default function MemberCard2({
 }) {
   return (
     <div
-      tabIndex={0}
+      {...(onClick ? PRESSABLE : {})}
       onClick={onClick}
       className={`group relative h-[340px] overflow-hidden rounded-[20px] bg-[#eceae4] shadow-[inset_0_0_0_1px_#e9e9e9] outline-none sm:h-[380px] lg:h-[420px] ${
         onClick ? "cursor-pointer" : "cursor-default"
@@ -43,6 +44,7 @@ export default function MemberCard2({
       {linkedin && (
         <a
           href={linkedin}
+          aria-label={`${name} on LinkedIn`}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import { PRESSABLE } from "@/lib/pressable";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import NavArrow from "@/components/ui/NavArrow";
@@ -171,6 +172,22 @@ function AwardCard({
     return () => startLenis();
   }, [isModalOpen]);
 
+  // Keyboard support for the mobile popup: Escape closes it, and focus goes
+  // back to the card that opened it.
+  const cardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const card = cardRef.current;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      card?.focus();
+    };
+  }, [isModalOpen]);
+
   const handleCardClick = () => {
     if (isMobile) {
       setIsModalOpen(true);
@@ -180,8 +197,17 @@ function AwardCard({
   return (
     <>
       <div
+        ref={cardRef}
+        // Mobile: the card opens the details popup, so it's a button.
+        // Desktop: nothing to activate, but it still takes Tab focus so
+        // keyboard users can reveal the hover overlay (group-focus-visible).
+        {...(isMobile
+          ? { ...PRESSABLE, "aria-haspopup": "dialog" as const }
+          : { tabIndex: 0 })}
         onClick={handleCardClick}
-        className="group relative w-full h-[320px] rounded-[24px] cursor-pointer overflow-hidden select-none bg-[#F8F8F8]"
+        className={`group relative w-full h-[320px] rounded-[24px] overflow-hidden select-none bg-[#F8F8F8] ${
+          isMobile ? "cursor-pointer" : ""
+        }`}
       >
         {/* ─── BASE FRONT SIDE (IMAGE & MOBILE SHORT TITLE BUTTON) ─── */}
         <div className="absolute inset-0 w-full h-full p-6 pb-6 flex flex-col items-center justify-between">
@@ -195,6 +221,7 @@ function AwardCard({
 
           {/* Short Award Name Button (Mobile Only) */}
           {isMobile && (
+            // Not separately focusable: the whole card is already the button.
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -213,7 +240,7 @@ function AwardCard({
         {/* ─── DESKTOP HOVER OVERLAY (NO CHANGES) ─── */}
         {!isMobile && (
           <div
-            className="absolute inset-0 w-full h-full rounded-[24px] p-8 flex flex-col items-center justify-center text-center transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto"
+            className="absolute inset-0 w-full h-full rounded-[24px] p-8 flex flex-col items-center justify-center text-center transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none group-hover:pointer-events-auto"
             style={{
               background:
                 "radial-gradient(circle at center, #F7F4EC 0%, #E3DDD0 45%, rgba(197, 189, 172, 1) 100%)",
@@ -249,6 +276,9 @@ function AwardCard({
                   exit={{ opacity: 0, scale: 0.92, y: 10 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   onClick={(e) => e.stopPropagation()}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={award.title}
                   data-lenis-prevent
                   className="relative w-full max-w-[380px] max-h-[85vh] overflow-y-auto rounded-[28px] p-6 sm:p-8 flex flex-col items-center text-center"
                   style={{
@@ -259,6 +289,7 @@ function AwardCard({
                   {/* Close Button */}
                   <button
                     type="button"
+                    autoFocus
                     onClick={() => setIsModalOpen(false)}
                     className="absolute top-4 right-4 w-9 h-9 cursor-pointer rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center text-[#212121] transition-colors"
                     aria-label="Close details"

@@ -127,7 +127,7 @@
 //                 <h3 className="mt-0 mb-[6px] text-[clamp(22px,1.9vw,24px)] text-[#000] tracking-[-0.01em]">
 //                   {current.name}
 //                 </h3>
-//                 <p className="m-0 text-[16px] w-[70%] tracking-[0.13em] h-[44px] leading-[140%] text-[#8A91A3]">
+//                 <p className="m-0 text-[16px] w-[70%] tracking-[0.13em] h-[44px] leading-[140%] text-[#5F6678]">
 //                   {current.role}
 //                 </p>
 //               </motion.div>
@@ -397,7 +397,7 @@ export default function Testimonials() {
                     <h3 className="mt-0 mb-[6px] text-[19px] lg:text-[clamp(22px,1.9vw,24px)] text-[#000] tracking-[-0.01em]">
                       {item.name}
                     </h3>
-                    <p className="m-0 w-full tracking-[0.06em] h-auto leading-[150%] xl:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#8A91A3]">
+                    <p className="m-0 w-full tracking-[0.06em] h-auto leading-[150%] xl:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#5F6678]">
                       {item.role}
                     </p>
                   </div>
@@ -429,7 +429,7 @@ export default function Testimonials() {
                     <h3 className="mt-0 mb-[6px] text-[19px] lg:text-[clamp(22px,1.9vw,24px)] text-[#000] tracking-[-0.01em]">
                       {current.name}
                     </h3>
-                    <p className="m-0 text-[13px] w-full tracking-[0.06em] h-auto leading-[150%] 2xl:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#8A91A3]">
+                    <p className="m-0 text-[13px] w-full tracking-[0.06em] h-auto leading-[150%] 2xl:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#5F6678]">
                       {current.role}
                     </p>
                   </motion.div>
@@ -714,7 +714,7 @@ export default function Testimonials() {
 //                 <h3 className="mt-0 mb-[6px] text-[19px] lg:text-[clamp(22px,1.9vw,24px)] text-[#000] tracking-[-0.01em]">
 //                   {current.name}
 //                 </h3>
-//                 <p className="m-0 text-[13px] w-full tracking-[0.06em] h-auto leading-[150%] lg:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#8A91A3]">
+//                 <p className="m-0 text-[13px] w-full tracking-[0.06em] h-auto leading-[150%] lg:text-[16px] lg:w-[70%] lg:tracking-[0.13em] lg:h-[44px] lg:leading-[140%] text-[#5F6678]">
 //                   {current.role}
 //                 </p>
 //               </motion.div>

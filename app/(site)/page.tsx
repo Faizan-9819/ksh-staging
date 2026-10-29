@@ -30,7 +30,7 @@
 
 // export default function Home() {
 //   return (
-//     <main>
+//     <div>
 //       <ScrollToTopOnLoad />
 //       <Hero />
 //       <About />
@@ -43,7 +43,7 @@
 //       <AssetShowcase />
 //       <Growth />
 //       <Insights />
-//     </main>
+//     </div>
 //   );
 // }
 import type { Metadata } from "next";
@@ -102,7 +102,7 @@ export default async function Home() {
   const insightPosts = await fetchHomeInsightPosts();
 
   return (
-    <main>
+    <div>
       <ScrollToTopOnLoad />
       <Hero />
       <About />
@@ -119,6 +119,6 @@ export default async function Home() {
       ) : (
         <Insights />
       )}
-    </main>
+    </div>
   );
 }

@@ -251,6 +251,11 @@ function MarqueeSlider({
 
     const handleKeydown = (e: KeyboardEvent) => {
       if (isStatic) return;
+      // Only react while focus is inside this gallery, never while a
+      // dialog (e.g. the gallery popup) is open on top of the page.
+      const root = viewportRef.current?.parentElement;
+      if (!root || !root.contains(document.activeElement)) return;
+      if (document.querySelector('[aria-modal="true"]')) return;
       if (e.key === "ArrowRight") goToSlide(currentIndex + 1);
       if (e.key === "ArrowLeft") goToSlide(currentIndex - 1);
     };
@@ -352,6 +357,20 @@ function MarqueeSlider({
                 cardRefs.current[idx] = el;
               }}
               onClick={onExpand ? () => onExpand(idx) : undefined}
+              {...(onExpand
+                ? {
+                    role: "button",
+                    tabIndex: 0,
+                    "aria-haspopup": "dialog" as const,
+                    "aria-label": `Open in gallery: ${slide.title}`,
+                    onKeyDown: (e: React.KeyboardEvent) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onExpand(idx);
+                      }
+                    },
+                  }
+                : {})}
             >
               {slide.type === "video" ? (
                 <iframe
@@ -359,6 +378,8 @@ function MarqueeSlider({
                   title={slide.title}
                   loading="lazy"
                   allow="autoplay; fullscreen; picture-in-picture"
+                  tabIndex={onExpand ? -1 : undefined}
+                  aria-hidden={onExpand ? true : undefined}
                   className={`w-full h-full object-cover ${onExpand ? "" : "pointer-events-none"}`}
                 />
               ) : (

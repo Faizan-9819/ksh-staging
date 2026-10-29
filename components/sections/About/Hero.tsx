@@ -1,4 +1,5 @@
 import React from "react";
+import HeroVideoToggle from "@/components/ui/HeroVideoToggle";
 
 function About() {
   return (
@@ -53,6 +54,8 @@ function About() {
       >
         About
       </h1>
+
+      <HeroVideoToggle />
     </section>
   );
 }

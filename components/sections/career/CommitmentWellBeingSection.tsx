@@ -466,6 +466,7 @@
 
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useState } from "react";
 
 interface CareerData {
@@ -554,6 +555,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   return (
     <div className={!isLast ? "border-b border-[#E5E0D8]" : ""}>
       <div
+        {...PRESSABLE}
         onClick={onToggle}
         className={`flex items-center justify-between gap-4 cursor-pointer ${
           isDesktop

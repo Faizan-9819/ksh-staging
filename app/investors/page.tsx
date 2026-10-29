@@ -20,7 +20,7 @@ export default function AifOverviewPage() {
     <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       <Hero />
 
-      <main className="flex-1">
+      <div className="flex-1">
         <Intro />
         <Lifecycle />
         <TrackRecord />
@@ -28,7 +28,7 @@ export default function AifOverviewPage() {
         <PositioningSnapshot />
         {/* <StrategicPartners /> */}
         {/* <CTA /> */}
-      </main>
+      </div>
     </div>
   );
 }

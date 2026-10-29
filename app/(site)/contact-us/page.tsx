@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main
+    <div
       className="min-h-screen bg-white"
       style={{
         // Match the fluid margin formula used across your main hero component
@@ -29,6 +29,6 @@ export default function ContactPage() {
       </Suspense>
       <ConnectWithUsSection />
       {/* <Footer /> */}
-    </main>
+    </div>
   );
 }

@@ -40,7 +40,7 @@ export default function GovernanceMemberCard({
           className="absolute inset-0 h-full w-full object-cover object-top"
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#ECEAE4] px-6 text-center font-inter text-[14px] text-[#8F8F8F]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#ECEAE4] px-6 text-center font-inter text-[14px] text-[#636363]">
           {name} — portrait
         </div>
       )}

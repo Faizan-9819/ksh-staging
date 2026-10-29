@@ -183,6 +183,13 @@ export default function Btn({
     onMouseLeave: () => {
       if (!isMobile && !filled) setHovered(false);
     },
+    // Same fill for keyboard focus as for mouse hover.
+    onFocus: () => {
+      if (!isMobile && !filled) setHovered(true);
+    },
+    onBlur: () => {
+      if (!isMobile && !filled) setHovered(false);
+    },
     className: `relative cursor-pointer inline-flex min-h-10 overflow-hidden items-center text-wrap max-w-full justify-center rounded-full border ${borderColor} ${bgColor} px-6 gap-6 transition-colors duration-300 ${className}`,
   };
 

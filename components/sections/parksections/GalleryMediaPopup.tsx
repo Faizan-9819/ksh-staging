@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import NavArrow from "@/components/ui/NavArrow";
 import { stopLenis, startLenis } from "@/components/ui/LenisProvider";
+import { useDialogA11y } from "@/components/ui/useDialogA11y";
 
 export interface GalleryPopupSlide {
   src: string;
@@ -38,6 +39,9 @@ export default function GalleryMediaPopup({
   const [isAnimating, setIsAnimating] = useState(false);
   const [popupTab, setPopupTab] = useState(initialTabIndex ?? 0);
   const [popupSlide, setPopupSlide] = useState(initialSlideIndex);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Escape is handled below (it animates the close), so no onClose here.
+  useDialogA11y(dialogRef, isOpen);
 
   useEffect(() => {
     if (initialTabIndex === null) return;
@@ -101,6 +105,11 @@ export default function GalleryMediaPopup({
       onClick={handleClose}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gallery-popup-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full max-w-4xl bg-white rounded-3xl pt-16 px-3 pb-6 sm:p-8 flex flex-col justify-center items-center shadow-2xl transition-all duration-200 ease-out overflow-hidden ${
           isAnimating
@@ -108,8 +117,18 @@ export default function GalleryMediaPopup({
             : "opacity-0 scale-95 translate-y-4"
         }`}
       >
+        <h2 id="gallery-popup-title" className="sr-only">
+          Park gallery
+        </h2>
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {popupSlides[popupSlide]
+            ? `Slide ${popupSlide + 1} of ${popupSlides.length}: ${popupSlides[popupSlide].title}`
+            : ""}
+        </p>
+
         {/* Close Button */}
         <button
+          type="button"
           onClick={handleClose}
           className="absolute top-5 right-5 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-[#f2f2f2] text-gray-500 flex items-center justify-center hover:bg-gray-200 transition-colors z-10 cursor-pointer"
           aria-label="Close popup"
@@ -133,14 +152,16 @@ export default function GalleryMediaPopup({
         <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 mt-2 max-w-full flex-wrap">
           {tabs.map((tab, idx) => (
             <button
+              type="button"
               key={`popup-tab-${tab.label}`}
+              aria-pressed={popupTab === idx}
               onClick={() => {
                 setPopupTab(idx);
                 setPopupSlide(0);
               }}
               className={`px-6 py-2 rounded-full text-xs sm:text-sm font-sora font-medium transition-colors cursor-pointer ${
                 popupTab === idx
-                  ? "bg-[#59624d] text-white"
+                  ? "bg-[#59624d] text-white underline underline-offset-4 font-semibold"
                   : "border border-gray-300 text-gray-500 bg-transparent"
               }`}
               dangerouslySetInnerHTML={{ __html: tab.label }}
@@ -157,6 +178,8 @@ export default function GalleryMediaPopup({
             {popupSlides.map((slide, idx) => (
               <div
                 key={`popup-slide-${slide.src}-${idx}`}
+                inert={idx !== popupSlide}
+                aria-hidden={idx !== popupSlide}
                 className="w-full min-w-full flex-shrink-0 flex items-center justify-center px-2 sm:px-3"
               >
                 {slide.type === "video" ? (

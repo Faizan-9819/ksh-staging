@@ -111,6 +111,7 @@
 
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -233,6 +234,7 @@ export default function GovernanceSection() {
             return (
               <div
                 key={item.number}
+                {...PRESSABLE}
                 onClick={() => handleAccordion(index)}
                 className="bg-white border border-[#E0E0E0] rounded-[20px] p-6 transition-all cursor-pointer select-none"
               >

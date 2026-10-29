@@ -36,9 +36,9 @@ export default function CaseAbout({ heading, paragraphs }: CaseAboutProps) {
         </div>
 
         {/* Heading */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight leading-[1.15] mb-8 sm:mb-10">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight leading-[1.15] mb-8 sm:mb-10">
           {heading}
-        </h1>
+        </h2>
 
         {/* Paragraph Content */}
         <div className="space-y-6 text-[#4A4A4A] text-sm sm:text-base md:text-[17px] leading-relaxed font-normal">

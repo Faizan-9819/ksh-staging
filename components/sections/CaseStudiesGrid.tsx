@@ -17,9 +17,9 @@ export default function CaseStudiesGrid({ posts }: CaseStudiesGridProps) {
             CASE STUDIES
           </h5>
         </div> */}
-        <h2 className="mb-6 sm:mb-8 leading-[110%] font-semibold text-[32px] sm:text-[48px]">
+        <h1 className="mb-6 sm:mb-8 leading-[110%] font-semibold text-[32px] sm:text-[48px]">
           Built Around Operational Needs
-        </h2>
+        </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 sm:gap-x-16 sm:gap-y-8">
           {posts.map((post) => {

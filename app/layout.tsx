@@ -10,6 +10,7 @@ import { PageTransitionProvider } from "@/components/ui/PageTransitionContext";
 import PageLoader from "@/components/ui/PageLoader";
 import VideoModal from "@/components/ui/VideoModal";
 import GATracker from "@/components/ui/GATracker";
+import SkipLink from "@/components/ui/SkipLink";
 import { organizationSchema } from "@/lib/schema";
 
 // Self-hosted via @fontsource (npm package assets, resolved at install time) —
@@ -65,6 +66,7 @@ export default function RootLayout({
       className={`h-full antialiased overflow-x-hidden ${sora.variable} ${inter.variable}`}
     >
       <body className="min-h-full flex flex-col">
+        <SkipLink />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}

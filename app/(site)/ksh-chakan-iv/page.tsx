@@ -42,7 +42,7 @@ export default function Page() {
   };
 
   return (
-    <main className="w-full">
+    <div className="w-full">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(chakan4Schema) }}
@@ -85,6 +85,6 @@ export default function Page() {
       />
       <GallerySlider content={galleryContent} />
       <InsightsSection content={insightsContent} />
-    </main>
+    </div>
   );
 }

@@ -544,6 +544,38 @@ const OurPurpose = () => {
     });
   }, [isDesktop, isSettled]);
 
+  // Keyboard focus landing on something below this section (Tab from here to
+  // VisionShowcase's buttons) jumps the page past the pinned runway in one
+  // go. Settle immediately, skip the height correction (like the resync
+  // above), then bring the focused element back on screen through Lenis —
+  // otherwise the page stays parked on Our Purpose.
+  useEffect(() => {
+    if (!isDesktop || isSettled) return;
+    const onFocusIn = (e: FocusEvent) => {
+      const c = containerRef.current;
+      const el = e.target;
+      if (hasSettledRef.current || !c || !(el instanceof Element)) return;
+      if (c.contains(el)) return;
+      if (!(c.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))
+        return;
+      hasSettledRef.current = true;
+      maxFrameRef.current = imagesRef.current.length - 1;
+      textVisibleRef.current = true;
+      setTextVisible(true);
+      settledViaResyncRef.current = true;
+      setIsSettled(true);
+      requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        lenisScrollTo(
+          window.scrollY + r.top - (window.innerHeight - r.height) / 2,
+          { immediate: true, force: true },
+        );
+      });
+    };
+    document.addEventListener("focusin", onFocusIn);
+    return () => document.removeEventListener("focusin", onFocusIn);
+  }, [isDesktop, isSettled]);
+
   // Shrinking the section from its tall scroll-runway height down to a
   // single viewport pulls everything below it upward by exactly that
   // difference. useLayoutEffect runs after the height actually commits to

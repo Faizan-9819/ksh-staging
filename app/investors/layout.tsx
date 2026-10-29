@@ -10,8 +10,12 @@ export default function AifLayout({
   return (
     <>
       {/* <AifNavbar /> */}
-      <Navbar />
-      {children}
+      <header>
+        <Navbar />
+      </header>
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        {children}
+      </main>
       <Footer />
     </>
   );

@@ -50,7 +50,7 @@
 //       const fill = p * spans.length;
 //       spans.forEach((s, i) => {
 //         // Keeps the text color changing naturally on scroll
-//         s.style.color = i < fill ? "var(--color-section-title)" : "#C3C3BC";
+//         s.style.color = i < fill ? "var(--color-section-title)" : "#64635D";
 //       });
 //     };
 //     window.addEventListener("scroll", onScroll, { passive: true });
@@ -81,7 +81,7 @@
 //           </div>
 
 //           <h2 className="m-0 font-[family-name:var(--font-sora),sans-serif] leading-[1.18] tracking-[-0.012em] lg:text-[38px] xl:text-[48px] 2xl:text-[48px]">
-//             <span ref={greyRef} className="block text-[#BDAEA6]">
+//             <span ref={greyRef} className="block text-[#64635D]">
 //               {GREY_WORDS.map((word, i) => {
 //                 // Clean the word string of punctuation (like commas) just for matching
 //                 const cleanWord = word.replace(/[^a-zA-Z]/g, "");
@@ -92,7 +92,7 @@
 //                   <span
 //                     key={i}
 //                     data-w="1"
-//                     className={`text-[#BDAEA6] [transition:color_.5s_ease] ${
+//                     className={`text-[#64635D] [transition:color_.5s_ease] ${
 //                       isBold ? "font-semibold" : "font-normal"
 //                     }`}
 //                   >
@@ -207,7 +207,7 @@ export default function About() {
       );
       const fill = p * spans.length;
       spans.forEach((s, i) => {
-        s.style.color = i < fill ? "var(--color-section-title)" : "#C3C3BC";
+        s.style.color = i < fill ? "var(--color-section-title)" : "#64635D";
       });
     };
     const onScroll = () => {
@@ -242,8 +242,8 @@ export default function About() {
             </h5>
           </div> */}
 
-          <h2 className="m-0 font-[family-name:var(--font-sora),sans-serif] leading-[1.2] lg:leading-[1.18] tracking-[-0.012em text-[20px] sm:text-[30px] lg:text-[38px] xl:text-[48px] 2xl:text-[48px]">
-            <span ref={greyRef} className="block text-[#BDAEA6]">
+          <p className="m-0 font-[family-name:var(--font-sora),sans-serif] leading-[1.2] lg:leading-[1.18] tracking-[-0.012em text-[20px] sm:text-[30px] lg:text-[38px] xl:text-[48px] 2xl:text-[48px]">
+            <span ref={greyRef} className="block text-[#64635D]">
               {GREY_WORDS.map((word, i) => {
                 const cleanWord = word.replace(/[^a-zA-Z]/g, "");
                 const isBold = BOLD_WORDS.includes(cleanWord) && i < 7;
@@ -252,7 +252,7 @@ export default function About() {
                   <span
                     key={i}
                     data-w="1"
-                    className={`text-[#BDAEA6] [transition:color_.5s_ease] ${
+                    className={`text-[#64635D] [transition:color_.5s_ease] ${
                       isBold ? "font-semibold" : "font-normal"
                     }`}
                   >
@@ -261,7 +261,7 @@ export default function About() {
                 );
               })}
             </span>
-          </h2>
+          </p>
         </div>
 
         {/* ── CONTENT ROW ── */}

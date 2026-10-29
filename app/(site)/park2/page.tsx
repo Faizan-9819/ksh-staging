@@ -10,7 +10,7 @@ import InteractiveMapSection from "@/components/sections/parksections/Interactiv
 
 export default function () {
   return (
-    <main className="w-full">
+    <div className="w-full">
       <VideoHeroSection />
       <TabNavSection />
       <ParkAbout />
@@ -20,6 +20,6 @@ export default function () {
       <InfrastructureSection />
       <ConcavePanoramaSlider />
       <InsightsSection />
-    </main>
+    </div>
   );
 }

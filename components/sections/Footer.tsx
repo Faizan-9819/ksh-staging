@@ -132,16 +132,16 @@
 //                       className="relative overflow-hidden flex items-center group justify-between py-[clamp(15px,1.6cqw,14px)]"
 //                     >
 //                       {/* Static Black Border (Base) */}
-//                       <div className="absolute group bottom-0 left-0 h-[1.5px] w-full bg-[#8F8F8F]" />
+//                       <div className="absolute group bottom-0 left-0 h-[1.5px] w-full bg-[#636363]" />
 
 //                       {/* Animated Black Border (Overlay) */}
 //                       <div className="absolute bottom-0 left-0 h-[1px] w-full bg-black scale-x-0 transition-transform duration-400 ease-in-out origin-left group-hover:scale-x-100" />
 
-//                       <h4 className="text-[16px] tracking-[-0.32px] transition-colors text-[#8F8F8F] group-hover:text-black">
+//                       <h4 className="text-[16px] tracking-[-0.32px] transition-colors text-[#636363] group-hover:text-black">
 //                         {label}
 //                       </h4>
 
-//                       <div className="flex h-[clamp(32px,2.7cqw,38px)] group-hover:bg-black group-hover:text-white w-[clamp(32px,2.7cqw,38px)] items-center justify-center transition-all duration-500 rounded-full border border-[#8F8F8F] group-hover:border-black">
+//                       <div className="flex h-[clamp(32px,2.7cqw,38px)] group-hover:bg-black group-hover:text-white w-[clamp(32px,2.7cqw,38px)] items-center justify-center transition-all duration-500 rounded-full border border-[#636363] group-hover:border-black">
 //                         <GoArrowUpRight />
 //                       </div>
 //                     </a>
@@ -177,9 +177,9 @@
 //             <div className="">
 //               <div className="mb-[clamp(34px,3.6cqw,48px)]  grid grid-cols-2 gap-[28px]">
 //                 <div>
-//                   <h3 className="mb-3.5 text-[20px] tracking-[-0.4px] text-[#000]">
+//                   <h2 className="mb-3.5 text-[20px] tracking-[-0.4px] text-[#000]">
 //                     KSH INFRA, Pune (Head Office)
-//                   </h3>
+//                   </h2>
 //                   <p className="text-[clamp(13px,1.08cqw,14px)]  leading-[140%] text-[#333]">
 //                     Gokhale Sanchit, Office No. 4, <br />
 //                     Survey No. 846, Servants of India Society, <br />
@@ -188,9 +188,9 @@
 //                   </p>
 //                 </div>
 //                 <div>
-//                   <h3 className="mb-3.5 text-[20px] tracking-[-0.4px] text-[#000]">
+//                   <h2 className="mb-3.5 text-[20px] tracking-[-0.4px] text-[#000]">
 //                     KSH INFRA, Mumbai
-//                   </h3>
+//                   </h2>
 //                   <p className="text-[clamp(13px,1.08cqw,14px)] w-[85%] leading-[140%] text-[#333]">
 //                     INNOV8, 8th Floor, Tower B, <br />
 //                     Peninsula Business Park, <br />
@@ -202,9 +202,9 @@
 //               {/* Policies and Socials */}
 //               <div className="flex flex-wrap w-full justify-between gap-6">
 //                 <div>
-//                   <h3 className="mb-4 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] text-[#000]">
+//                   <h2 className="mb-4 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] text-[#000]">
 //                     Policies
-//                   </h3>
+//                   </h2>
 //                   {["Privacy", "Disclaimer"].map((p) => (
 //                     <a
 //                       key={p}
@@ -245,6 +245,7 @@ import ArrowUpRightIcon from "../ui/ArrowUpRightIcon";
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import { FiMail, FiPhone } from "react-icons/fi";
+// import { NODAL_OFFICER } from "@/lib/nodalOfficer";
 
 // href is null where this project has no matching page yet — those labels
 // stay visible but non-navigating instead of linking to the wrong place.
@@ -368,7 +369,7 @@ export default function Footer() {
   }
 
   return (
-    <section className="relative w-full overflow-hidden rounded-t-[20px] bg-[#F9F7F2]">
+    <footer className="relative w-full overflow-hidden rounded-t-[20px] bg-[#F9F7F2]">
       <div className="fix">
         <div className="relative lg:py-24 py-12">
           {/* TOP ROW */}
@@ -420,20 +421,22 @@ export default function Footer() {
                     <input
                       type="text"
                       placeholder="NAME"
+                      aria-label="Name"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       disabled={isSending}
-                      className="h-[47px] w-full rounded-full bg-black/10 text-[12px] text-[#000] placeholder:text-[#000] px-6 focus:outline-hidden focus:ring-1 focus:ring-[#59624D]/30"
+                      className="h-[47px] w-full rounded-full bg-black/10 text-[12px] text-[#000] placeholder:text-[#000] px-6 focus:ring-1 focus:ring-[#59624D]/30"
                     />
                     <input
                       type="email"
                       placeholder="EMAIL"
+                      aria-label="Email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isSending}
-                      className="h-[47px] w-full rounded-full bg-black/10 text-[12px] text-[#000] placeholder:text-[#000] px-6 focus:outline-hidden focus:ring-1 focus:ring-[#59624D]/30"
+                      className="h-[47px] w-full rounded-full bg-black/10 text-[12px] text-[#000] placeholder:text-[#000] px-6 focus:ring-1 focus:ring-[#59624D]/30"
                     />
                   </div>
                   {error && <p className="text-[12px] text-red-600">{error}</p>}
@@ -458,12 +461,12 @@ export default function Footer() {
           {/* BOTTOM ROW */}
           <div className="grid grid-cols-1 gap-y-10 gap-x-[80px] md:grid-cols-2">
             {/* Navigation Links - Stacked on Mobile for clean UI */}
-            <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-x-[clamp(24px,2.6cqw,40px)] gap-y-0 max-sm:gap-y-6">
+            <nav aria-label="Footer" className="grid grid-cols-2 max-sm:grid-cols-1 gap-x-[clamp(24px,2.6cqw,40px)] gap-y-0 max-sm:gap-y-6">
               {NAV_COLS.map((col) => (
                 <div key={col.title} className="flex flex-col">
-                  <h3 className="mb-2 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
+                  <h2 className="mb-2 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
                     {col.title}
-                  </h3>
+                  </h2>
                   {col.links.map(({ label, href }) => (
                     <Link
                       key={label}
@@ -477,9 +480,9 @@ export default function Footer() {
                       {/* Animated Black Border (Overlay) */}
                       <div className="absolute bottom-0 left-0 h-[1px] w-full bg-black scale-x-0 transition-transform duration-400 ease-in-out origin-left group-hover:scale-x-100" />
 
-                      <h4 className="text-[16px] tracking-[-0.32px] transition-colors text-[#8F8F8F] group-hover:text-black">
+                      <span className="font-sora text-[16px] tracking-[-0.32px] transition-colors text-[#636363] group-hover:text-black group-focus-visible:text-black">
                         {label}
-                      </h4>
+                      </span>
 
                       <div className="flex h-[clamp(32px,2.7cqw,38px)] w-[clamp(32px,2.7cqw,38px)] shrink-0 items-center justify-center rounded-full bg-transparent border border-[#59624D] text-[#59624D] group-hover:bg-[#59624D] group-hover:text-white transition-all duration-500 transform-gpu">
                         <ArrowUpRightIcon size={14} />
@@ -488,7 +491,7 @@ export default function Footer() {
                   ))}
                 </div>
               ))}
-            </div>
+            </nav>
 
             {/* Address & Policy Meta Block */}
             {/* justify-start (not justify-between) — with only 2 children,
@@ -510,9 +513,9 @@ export default function Footer() {
                   would otherwise land at two different heights. */}
               <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-x-7 gap-y-6">
                 <div className="border-b border-[#00000020] pb-6">
-                  <h3 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
+                  <h2 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
                     KSH INFRA, Pune <br /> (Head Office)
-                  </h3>
+                  </h2>
                   <p className="text-[clamp(13px,1.08cqw,14px)] leading-[140%] text-[#333]">
                     Gokhale Sanchit, Office No. 4, <br />
                     Survey No. 846, Servants of India Society, <br />
@@ -521,9 +524,9 @@ export default function Footer() {
                   </p>
                 </div>
                 <div className="border-b border-[#00000020] pb-6">
-                  <h3 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
+                  <h2 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
                     KSH INFRA, Mumbai
-                  </h3>
+                  </h2>
                   <p className="text-[clamp(13px,1.08cqw,14px)] md:w-[85%] leading-[140%] text-[#333]">
                     INNOV8, 8th Floor, Tower B, <br />
                     Peninsula Business Park, <br />
@@ -540,9 +543,9 @@ export default function Footer() {
                 {/* Left: Connect, then Policies below it */}
                 <div className="flex flex-col gap-9">
                   <div>
-                    <h3 className="mb-4 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
+                    <h2 className="mb-4 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
                       Connect
-                    </h3>
+                    </h2>
                     <div className="flex flex-col gap-3">
                       {CONTACT_DETAILS.map(({ label, href, icon }) => (
                         <a
@@ -559,13 +562,42 @@ export default function Footer() {
                     </div>
                   </div>
 
+                  {/* TODO(KSH): Nodal Officer block hidden until KSH shares the officer details (lib/nodalOfficer.ts).
                   <div>
-                    <h3 className="mb-1 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
+                    <h2 className="mb-2 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
+                      Accessibility (Nodal Officer)
+                    </h2>
+                    <div className="flex flex-col gap-1.5 text-[clamp(13px,1.08cqw,15px)] font-[family:var(--font-sora),sans-serif] text-[#333]">
+                      <p className="m-0">
+                        {NODAL_OFFICER.name}, {NODAL_OFFICER.designation}
+                      </p>
+                      <a
+                        href={`mailto:${NODAL_OFFICER.email}`}
+                        className="hover:text-[#C55C25] transition-colors"
+                      >
+                        {NODAL_OFFICER.email}
+                      </a>
+                      <a
+                        href={NODAL_OFFICER.phoneHref}
+                        className="hover:text-[#C55C25] transition-colors"
+                      >
+                        {NODAL_OFFICER.phone}
+                      </a>
+                    </div>
+                  </div>
+                  */}
+
+                  <div>
+                    <h2 className="mb-1 text-[clamp(18px,1.7cqw,20px)] tracking-[-0.4px] font-medium text-[#000]">
                       Policies
-                    </h3>
+                    </h2>
                     <div className="flex flex-col gap-2">
                       {[
                         { label: "Privacy Policy", href: "/privacy-policy" },
+                        {
+                          label: "Accessibility Statement",
+                          href: "/accessibility-statement",
+                        },
                         // { label: "Disclaimer", href: "#" },
                       ].map(({ label, href }) => (
                         <Link
@@ -582,9 +614,9 @@ export default function Footer() {
 
                 {/* Right: Registered details */}
                 <div>
-                  <h3 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
+                  <h2 className="mb-3.5 text-[20px] tracking-[-0.4px] font-medium text-[#000]">
                     KSH INFRA FUND I <br /> Registration Details
-                  </h3>
+                  </h2>
                   <div className="flex flex-col gap-2.5 text-[clamp(13px,1.08cqw,14px)] leading-[140%] text-[#333]">
                     <p className="m-0">
                       <span className="text-[#333] text-[14px] font-medium">
@@ -627,6 +659,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }

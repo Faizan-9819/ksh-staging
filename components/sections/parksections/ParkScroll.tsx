@@ -1,5 +1,6 @@
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import React, { useState } from "react";
 
 type Item = {
@@ -84,6 +85,7 @@ const DesktopAccordionItem = ({
   return (
     <div className={isLast ? "" : "border-b border-gray-300"}>
       <div
+        {...PRESSABLE}
         onClick={onToggle}
         className={`flex items-center justify-between gap-4 cursor-pointer py-4 lg:py-5`}
       >
@@ -219,6 +221,7 @@ const MobileAccordionItem = ({
   return (
     <div className={isLast ? "" : "border-b border-gray-300"}>
       <div
+        {...PRESSABLE}
         onClick={onToggle}
         className={`flex items-center justify-between gap-3 cursor-pointer ${
           isActive ? "py-5" : "py-3.5"

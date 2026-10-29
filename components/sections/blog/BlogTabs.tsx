@@ -140,6 +140,7 @@ export default function BlogTabs({
                 tabButtonRefs.current[i] = el;
               }}
               onClick={() => selectTab(i)}
+              aria-pressed={resolvedIndex === i}
               className={`flex-1 min-w-[160px] text-center font-sora text-[16px] lg:text-[18px] whitespace-nowrap pb-[14px] transition-colors border-b-2 -mb-px ${
                 resolvedIndex === i
                   ? "text-[#212121] border-[#59624d]"

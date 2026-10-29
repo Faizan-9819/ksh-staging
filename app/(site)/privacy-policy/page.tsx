@@ -185,15 +185,17 @@ const Page = () => {
               Our Cookies Policy explains what cookies are, how we use cookies,
               managing cookies and further information about cookies.
             </p>
+            <h3 className="font-semibold text-[#212121] text-[19px]">
+              What Are Cookies
+            </h3>
             <p>
-              <strong>What Are Cookies</strong>
-              <br />
               Cookies are small pieces of text files sent by your web browser
               and stored on your device by a website you visit.
             </p>
+            <h3 className="font-semibold text-[#212121] text-[19px]">
+              How We Use Cookies
+            </h3>
             <p>
-              <strong>How We Use Cookies</strong>
-              <br />
               We use analytical/performance cookies. These cookies allow us to
               recognize and count the number of visitors and to see how visitors
               move around this website when they are using it. These cookies do
@@ -201,16 +203,18 @@ const Page = () => {
               these cookies collect is aggregated and is therefore anonymous.
               This helps us to improve the structure of this website.
             </p>
+            <h3 className="font-semibold text-[#212121] text-[19px]">
+              Managing Cookies
+            </h3>
             <p>
-              <strong>Managing Cookies</strong>
-              <br />
               If you would like to delete cookies or instruct your web browser
               to disable cookies, please visit the help pages of your web
               browser.
             </p>
+            <h3 className="font-semibold text-[#212121] text-[19px]">
+              Further Information about Cookies
+            </h3>
             <p>
-              <strong>Further Information about Cookies</strong>
-              <br />
               For further information, please refer to
               https://kshinfra.com/privacy-policy.
               <br />

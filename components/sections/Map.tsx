@@ -1635,6 +1635,56 @@ export default function Map({
                         : "cursor-default"
                     }`}
                     style={{ transform: `scale(${svgScale.toFixed(4)})` }}
+                    // Keyboard: Tab reaches each state, focus highlights it
+                    // like hover, Enter/Space opens it like a click.
+                    role="button"
+                    // Always in the Tab order (not just once the scroll
+                    // reveal reaches them), so keyboard users land here
+                    // straight after the previous section.
+                    tabIndex={selectedState === null ? 0 : -1}
+                    aria-label={
+                      isComingSoon
+                        ? `${state.label.trim()} (Coming Soon)`
+                        : `View parks in ${state.label.trim()}`
+                    }
+                    aria-disabled={isComingSoon || undefined}
+                    onFocus={() => {
+                      if (selectedState !== null) return;
+                      // Focus arriving before the reveal finished: jump it
+                      // to the end so the states are visible and usable.
+                      if (!statesSettled) {
+                        isCapturingRef.current = false;
+                        setIsCapturing(false);
+                        virtualProgressRef.current = 1;
+                        setVirtualProgress(1);
+                        setStatesSettled(true);
+                        // Park the page on the map through Lenis too (same
+                        // as checkEntry), else Lenis eases back to its stale
+                        // target and yanks the page to the previous section.
+                        lenisScrollTo(trackRef.current!, {
+                          immediate: true,
+                          force: true,
+                        });
+                        if (trackRef.current) {
+                          window.scrollTo({
+                            top: trackRef.current.offsetTop,
+                            behavior: "instant" as ScrollBehavior,
+                          });
+                        }
+                      }
+                      setHoveredState(id);
+                    }}
+                    onBlur={() => isInteractive && setHoveredState(null)}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter" && e.key !== " ") return;
+                      e.preventDefault();
+                      // Keep Space from also reaching the section's
+                      // window-level scroll-capture key handler.
+                      e.stopPropagation();
+                      e.currentTarget.dispatchEvent(
+                        new MouseEvent("click", { bubbles: true }),
+                      );
+                    }}
                     onMouseEnter={() => isInteractive && setHoveredState(id)}
                     onMouseLeave={() => isInteractive && setHoveredState(null)}
                     onClick={() => {

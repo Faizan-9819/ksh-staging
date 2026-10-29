@@ -59,11 +59,11 @@ async function BlogsContent() {
 
 export default function BlogsPage() {
   return (
-    <main className="w-full">
+    <div className="w-full">
       <BlogHero />
       <Suspense fallback={<BlogsPageSkeleton />}>
         <BlogsContent />
       </Suspense>
-    </main>
+    </div>
   );
 }

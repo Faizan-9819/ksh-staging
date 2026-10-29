@@ -1,5 +1,6 @@
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import { useEffect, useState } from "react";
 import Popup from "./popup";
 import { FaLinkedinIn } from "react-icons/fa";
@@ -248,6 +249,7 @@ export default function TeamSection() {
                 {member.linkedin && (
                   <a
                     href={member.linkedin}
+                    aria-label={`${member.name} on LinkedIn`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -259,6 +261,7 @@ export default function TeamSection() {
 
                 {/* Image */}
                 <div
+                  {...PRESSABLE}
                   onClick={() => {
                     setSelectedMember(member);
                     setOpen(true);

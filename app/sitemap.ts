@@ -12,6 +12,7 @@ const SITE_URL = "https://www.kshinfra.com";
 const STATIC_ROUTES: { path: string; priority: number; changefreq: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changefreq: "daily" },
   { path: "/about-ksh", priority: 0.6, changefreq: "monthly" },
+  { path: "/accessibility-statement", priority: 0.3, changefreq: "yearly" },
   { path: "/blogs", priority: 0.8, changefreq: "daily" },
   { path: "/careers", priority: 0.5, changefreq: "monthly" },
   { path: "/case-studies", priority: 0.6, changefreq: "monthly" },

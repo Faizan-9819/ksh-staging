@@ -224,77 +224,6 @@ export default function ParksSection() {
       <div className="relative w-full z-10 ">
         {/* Main Carousel Wrapper Container */}
         <div className="relative w-full overflow-hidden min-h-[550px] lg:min-h-[620px]">
-          <div className="absolute inset-x-0 bottom-6 sm:bottom-6 2xl:bottom-13 z-30 pointer-events-none">
-            <div className="fix flex justify-end">
-              <div className="inline-flex items-center gap-1 pointer-events-auto">
-                <div
-                  onClick={scrollPrev}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      scrollPrev();
-                    }
-                  }}
-                  aria-label="Previous Slide"
-                  className="rounded-full flex items-center justify-center text-white bg-black/30 hover:bg-black/50 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
-                >
-                  {/* <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg> */}
-                  <NavArrow
-                    direction="prev"
-                    // tone="dark"
-                    // onClick={() => emblaApi?.scrollNext()}
-                  />
-                </div>
-
-                <div
-                  onClick={scrollNext}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      scrollNext();
-                    }
-                  }}
-                  aria-label="Next Slide"
-                  className="rounded-full flex items-center justify-center text-white bg-black/30 hover:bg-black/50 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
-                >
-                  {/* <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M9 5l7 7-7 7"
-                  /> */}
-                  {/* </svg> */}
-                  <NavArrow
-                    direction="next"
-                    // tone="dark"
-                    // onClick={() => emblaApi?.scrollNext()}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
           {/* Static Glassmorphic Navigation Buttons (Fixed in layout) */}
           {/* <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 z-30 pointer-events-auto">
             <div className="inline-flex items-center gap-2"> */}
@@ -345,9 +274,11 @@ export default function ParksSection() {
           {/* Embla Viewport */}
           <div className="overflow-hidden w-full h-full" ref={emblaRef}>
             <div className="flex touch-pan-y w-full h-full">
-              {PARKS_DATA.map((park) => (
+              {PARKS_DATA.map((park, idx) => (
                 <div
                   key={park.id}
+                  // Off-screen slides render the same buttons; keep them out of the Tab order.
+                  inert={idx !== selectedIndex}
                   className="relative flex-[0_0_100%] min-w-0 min-h-[550px] lg:h-screen bg-cover bg-center overflow-hidden flex flex-col justify-between py-6 sm:py-10 lg:py-14"
                   style={{ backgroundImage: `url(${park.bgImage})` }}
                 >
@@ -556,6 +487,79 @@ export default function ParksSection() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+          {/* Slider arrows come after the slides in the DOM so Tab reaches
+              the active slide buttons first (still drawn bottom-right). */}
+          <div className="absolute inset-x-0 bottom-6 sm:bottom-6 2xl:bottom-13 z-30 pointer-events-none">
+            <div className="fix flex justify-end">
+              <div className="inline-flex items-center gap-1 pointer-events-auto">
+                <div
+                  onClick={scrollPrev}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      scrollPrev();
+                    }
+                  }}
+                  aria-label="Previous Slide"
+                  className="rounded-full flex items-center justify-center text-white bg-black/30 hover:bg-black/50 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
+                >
+                  {/* <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg> */}
+                  <NavArrow
+                    direction="prev"
+                    // tone="dark"
+                    // onClick={() => emblaApi?.scrollNext()}
+                  />
+                </div>
+
+                <div
+                  onClick={scrollNext}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      scrollNext();
+                    }
+                  }}
+                  aria-label="Next Slide"
+                  className="rounded-full flex items-center justify-center text-white bg-black/30 hover:bg-black/50 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
+                >
+                  {/* <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M9 5l7 7-7 7"
+                  /> */}
+                  {/* </svg> */}
+                  <NavArrow
+                    direction="next"
+                    // tone="dark"
+                    // onClick={() => emblaApi?.scrollNext()}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

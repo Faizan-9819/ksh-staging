@@ -8,10 +8,12 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      <div className="w-full pt-safe-top">
+      <header className="w-full pt-safe-top">
         <Navbar />
-      </div>
-      {children}
+      </header>
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        {children}
+      </main>
       <Footer />
     </>
   );

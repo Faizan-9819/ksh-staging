@@ -29,7 +29,7 @@ export default function Hero() {
       />
 
       <div className="absolute inset-x-0 bottom-[-5px] flex justify-end px-4 sm:bottom-[-30px] sm:px-10 lg:bottom-[-20px]">
-        <span
+        <h1
           className="whitespace-nowrap font-sora font-bold uppercase leading-none tracking-[-0.04em] text-transparent"
           style={{
             fontSize: "clamp(40px, 9vw, 158px)",
@@ -41,7 +41,7 @@ export default function Hero() {
           }}
         >
           Governance
-        </span>
+        </h1>
       </div>
     </section>
   );

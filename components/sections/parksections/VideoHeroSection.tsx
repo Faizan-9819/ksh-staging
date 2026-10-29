@@ -10,6 +10,7 @@ import {
   useScroll,
 } from "framer-motion";
 import Btn from "@/components/ui/Btn";
+import HeroVideoToggle from "@/components/ui/HeroVideoToggle";
 import CertDownloadModal from "./CertDownloadModal";
 import BrochurePopForm from "./BrochurePopForm";
 import { lenisScrollTo } from "@/components/ui/LenisProvider";
@@ -306,7 +307,10 @@ export default function VideoHeroSection({
   return (
     <div ref={wrapperRef} className="relative w-full h-[145vh]">
       {/* Sticky video background, pinned for the full scroll range of this wrapper */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#8e8e8e]">
+      <div
+        data-hero-video-scope
+        className="sticky top-0 h-screen w-full overflow-hidden bg-[#8e8e8e]"
+      >
         {imageSrc && mobileImageSrc ? (
           isDesktopViewport !== null && (
             <Image
@@ -330,6 +334,14 @@ export default function VideoHeroSection({
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
+        {!(imageSrc && mobileImageSrc) && (
+          // Kept small and low so it sits under the cards that slide in
+          // over the bottom of this hero (their bottom padding is 64–80px).
+          <HeroVideoToggle
+            size="sm"
+            bottomClassName="bottom-1 lg:bottom-5"
+          />
+        )}
 
         <div
           className="pointer-events-none absolute inset-0"
@@ -348,7 +360,7 @@ export default function VideoHeroSection({
           }`}
         >
           <div className="flex flex-col items-start text-white">
-            <p
+            <h1
               className="font-sora font-semibold text-[32px] sm:text-[46px] lg:text-[60px] tracking-[-0.64px] sm:tracking-[-0.92px] lg:tracking-[-1.2px] leading-none m-0"
               dangerouslySetInnerHTML={{ __html: content.title }}
             />
@@ -366,7 +378,7 @@ export default function VideoHeroSection({
           animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : 60 }}
           initial={{ opacity: 0, y: 60 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className={`absolute inset-x-0 bottom-0 pb-[48px] sm:pb-[64px] lg:pb-[80px] fix ${
+          className={`absolute inset-x-0 bottom-0 pb-[64px] lg:pb-[80px] fix ${
             revealed ? "" : "pointer-events-none"
           }`}
         >

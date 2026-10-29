@@ -102,11 +102,13 @@ export default function GallerySlider({
       <div className="fix flex items-center justify-center gap-[8px] sm:gap-[16px] mb-8 sm:mb-12 relative z-20">
         {TABS.map((tab, idx) => (
           <button
+            type="button"
             key={tab.label}
+            aria-pressed={activeTab === idx}
             onClick={() => setActiveTab(idx)}
             className={`flex-1 sm:flex-none px-2 sm:px-12 py-2.5 sm:py-4 rounded-[48px] text-[13px] sm:text-[20px] font-sora font-normal leading-[1.4] whitespace-nowrap cursor-pointer transition-colors ${
               activeTab === idx
-                ? "bg-[#59624d] text-white"
+                ? "bg-[#59624d] text-white underline underline-offset-4"
                 : "border-[0.8px] border-[#9e9e9e] text-[#9e9e9e] bg-transparent"
             }`}
             dangerouslySetInnerHTML={{ __html: tab.label }}
@@ -129,6 +131,18 @@ export default function GallerySlider({
                 className="w-full h-full shrink-0 cursor-pointer rounded-2xl overflow-hidden bg-[#CBC4B5]"
                 style={{ marginRight: idx === slides.length - 1 ? 0 : 16 }}
                 onClick={() => setPopupTab(activeTab)}
+                role="button"
+                tabIndex={idx === activeSlide ? 0 : -1}
+                inert={idx !== activeSlide}
+                aria-hidden={idx !== activeSlide}
+                aria-haspopup="dialog"
+                aria-label={`Open in gallery: ${slide.title}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setPopupTab(activeTab);
+                  }
+                }}
               >
                 {slide.type === "video" ? (
                   <iframe
@@ -136,6 +150,8 @@ export default function GallerySlider({
                     title={slide.title}
                     loading="lazy"
                     allow="autoplay; fullscreen; picture-in-picture"
+                    tabIndex={-1}
+                    aria-hidden
                     className="w-full h-full object-cover pointer-events-none"
                   />
                 ) : (

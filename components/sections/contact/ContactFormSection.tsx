@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { usePageTransition } from "@/components/ui/PageTransitionContext";
 import { Mail, Phone } from "lucide-react";
 import Btn from "@/components/ui/Btn";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { useFormSubmit } from "@/components/ui/FormSubmitContext";
 
 const NAME_REGEX = /^[a-zA-Z\s]{2,}$/;
@@ -128,108 +129,33 @@ interface EnquirySelectProps {
   disabled?: boolean;
 }
 
-// Same custom listbox as the career page's department dropdown — a native
-// <select>'s option hover color is OS-rendered in Chrome and can't be
-// overridden with CSS, so this is the only way to get the beige hover here.
+// Same keyboard-accessible custom listbox as the career page's department
+// dropdown (see CustomSelect for why it isn't a native <select>).
 function EnquirySelect({ value, onChange, disabled }: EnquirySelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
-
-  const selected = ENQUIRY_OPTIONS.find((opt) => opt.value === value);
-
   return (
-    <div ref={containerRef} className="relative w-full">
-      <input type="hidden" name="typeOfEnquiry" value={value} />
-
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        className="w-full bg-white rounded-xl px-4 sm:px-5 py-3.5 sm:py-4 outline-none border border-transparent focus:border-gray-400 transition-colors cursor-pointer text-sm sm:text-base flex items-center justify-between disabled:cursor-not-allowed"
-        style={{
-          fontFamily: "var(--font-inter), Inter, sans-serif",
-          fontWeight: 400,
-          lineHeight: "normal",
-          color: selected ? "#212121" : "#868686",
-        }}
-      >
-        <span className="truncate">
-          {selected ? selected.label : "Type of Enquiry"}
-        </span>
-        <svg
-          width="14"
-          height="8"
-          viewBox="0 0 14 8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={`shrink-0 ml-2 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        >
-          <path
-            d="M1 1L7 7L13 1"
-            stroke="#868686"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-
-      {isOpen && (
-        <ul
-          role="listbox"
-          className="absolute z-50 top-12 left-0 mt-2 w-full rounded-xl bg-white border border-[#E5E0D8] shadow-sm overflow-hidden"
-        >
-          {ENQUIRY_OPTIONS.map((opt) => {
-            const isSelected = opt.value === value;
-            return (
-              <li
-                key={opt.value}
-                role="option"
-                aria-selected={isSelected}
-                onClick={() => {
-                  onChange(opt.value);
-                  setIsOpen(false);
-                }}
-                className={`px-4 sm:px-5 py-2 cursor-pointer transition-colors hover:bg-[#E2DED5] text-sm sm:text-base ${
-                  isSelected ? "font-medium text-[#212121]" : "text-[#212121]"
-                }`}
-                style={{
-                  fontFamily: "var(--font-inter), Inter, sans-serif",
-                  fontWeight: 400,
-                }}
-              >
-                {opt.label}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+    <CustomSelect
+      name="typeOfEnquiry"
+      options={ENQUIRY_OPTIONS}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      placeholder="Type of Enquiry"
+      triggerClassName={`w-full bg-white rounded-xl px-4 sm:px-5 py-3.5 sm:py-4 border border-transparent focus:border-gray-400 transition-colors text-sm sm:text-base flex items-center justify-between ${
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      }`}
+      triggerStyle={{
+        fontFamily: "var(--font-inter), Inter, sans-serif",
+        fontWeight: 400,
+        lineHeight: "normal",
+        color: value ? "#212121" : "#868686",
+      }}
+      listClassName="absolute z-50 top-12 left-0 mt-2 w-full rounded-xl bg-white border border-[#E5E0D8] shadow-sm overflow-hidden"
+      optionClassName="px-4 sm:px-5 py-2 text-sm sm:text-base"
+      optionStyle={{
+        fontFamily: "var(--font-inter), Inter, sans-serif",
+        fontWeight: 400,
+      }}
+    />
   );
 }
 
@@ -385,7 +311,7 @@ export default function ContactFormSection() {
 
           {/* Pune Head Office */}
           <div className="space-y-1.5 sm:space-y-2 pt-2">
-            <h3
+            <h2
               className="text-xl sm:text-[22px] lg:text-[24px]"
               style={{
                 color: "#212121",
@@ -395,7 +321,7 @@ export default function ContactFormSection() {
               }}
             >
               Pune (Head Office)
-            </h3>
+            </h2>
             <p
               className="text-base sm:text-lg lg:text-[20px]"
               style={{
@@ -413,7 +339,7 @@ export default function ContactFormSection() {
 
           {/* Mumbai Office */}
           <div className="space-y-1.5 sm:space-y-2">
-            <h3
+            <h2
               className="text-xl sm:text-[22px] lg:text-[24px]"
               style={{
                 color: "#212121",
@@ -423,7 +349,7 @@ export default function ContactFormSection() {
               }}
             >
               KSH INFRA, Mumbai
-            </h3>
+            </h2>
             <p
               className="text-base sm:text-lg lg:text-[20px]"
               style={{

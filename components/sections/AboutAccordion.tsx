@@ -111,7 +111,16 @@ export default function AboutAccordion() {
                     transition={T}
                     className="m-0 ms-4 mt-2 lg:mt-0 lg:ms-0 font-medium text-[#212121] leading-[1.1] lg:leading-[1.05] tracking-[-0.02em] font-[family-name:var(--font-sora),sans-serif]"
                   >
-                    {d.title}
+                    {/* Native button so Tab + Enter/Space toggle the row
+                        (the row div's onClick only covers the mouse). */}
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => setOpen(i)}
+                      className="cursor-pointer border-0 bg-transparent p-0 text-left [font:inherit] text-inherit"
+                    >
+                      {d.title}
+                    </button>
                   </motion.h3>
 
                   {/* Desktop view rendering content standard block rules */}

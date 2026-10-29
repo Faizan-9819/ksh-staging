@@ -164,7 +164,7 @@
 //                         <span
 //                           className="font-[family-name:var(--font-sora),sans-serif] text-[15px] sm:text-[17px] lg:text-[clamp(16px,1.3vw,19px)] whitespace-nowrap [transition:color_.35s_ease]"
 //                           style={{
-//                             color: on ? "#212121" : "#868686",
+//                             color: on ? "#212121" : "#636363",
 //                           }}
 //                         >
 //                           {s.name}
@@ -482,6 +482,8 @@ export default function Services() {
                       <Link
                         key={s.name}
                         href={s.href}
+                        // Tabbing onto a row previews it, same as hovering.
+                        onFocus={() => setActive(i)}
                         onMouseEnter={() => {
                           if (
                             typeof window !== "undefined" &&
@@ -499,7 +501,7 @@ export default function Services() {
                         <span
                           className="font-[family-name:var(--font-sora),sans-serif] text-[15px] sm:text-[17px] lg:text-[clamp(16px,1.3vw,19px)] whitespace-nowrap [transition:color_.35s_ease]"
                           style={{
-                            color: on ? "#212121" : "#868686",
+                            color: on ? "#212121" : "#636363",
                           }}
                         >
                           {s.name}

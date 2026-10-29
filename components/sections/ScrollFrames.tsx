@@ -422,6 +422,39 @@ export default function ScrollFrames() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isDesktop, isSettled, shouldLoad]);
 
+  // Keyboard focus landing on something below this section (Tab from the
+  // About accordion to the Map) jumps the page past the pinned runway in one
+  // go. Settle immediately, then bring the focused element back on screen
+  // through Lenis — otherwise the page gets thrown back up here.
+  const skipCorrectionRef = useRef(false);
+  useEffect(() => {
+    if (!isDesktop || isSettled) return;
+    const onFocusIn = (e: FocusEvent) => {
+      const c = containerRef.current;
+      const el = e.target;
+      if (hasSettledRef.current || !c || !(el instanceof Element)) return;
+      if (c.contains(el)) return;
+      if (!(c.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))
+        return;
+      hasSettledRef.current = true;
+      staggerTimers.current.forEach(clearTimeout);
+      staggerTimers.current = [];
+      revealedRef.current = CARDS.length;
+      setRevealedCount(CARDS.length);
+      skipCorrectionRef.current = true;
+      setIsSettled(true);
+      requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        lenisScrollTo(
+          window.scrollY + r.top - (window.innerHeight - r.height) / 2,
+          { immediate: true, force: true },
+        );
+      });
+    };
+    document.addEventListener("focusin", onFocusIn);
+    return () => document.removeEventListener("focusin", onFocusIn);
+  }, [isDesktop, isSettled]);
+
   // Shrinking the section from its tall scroll-runway height down to a
   // single viewport pulls everything below it upward by exactly that
   // difference. useLayoutEffect runs after the height actually commits to
@@ -441,6 +474,12 @@ export default function ScrollFrames() {
   // left for the next tick to chase.
   useLayoutEffect(() => {
     if (!isSettled) return;
+    // Settled by keyboard focus jumping past (see below): the focus handler
+    // positions the page itself, so no correction here.
+    if (skipCorrectionRef.current) {
+      skipCorrectionRef.current = false;
+      return;
+    }
     const delta = scrollHeight - window.innerHeight;
     if (delta > 0) {
       lenisScrollTo(window.scrollY - delta, { immediate: true });
@@ -483,9 +522,9 @@ export default function ScrollFrames() {
               <div className="relative z-10 flex flex-col h-full justify-around">
                 <div className="h-auto mb-1 flex items-end">
                   <div className="flex items-baseline gap-1 flex-wrap">
-                    <h6 className="text-[18px] sm:text-[14px] tracking-[-0.02em] text-[#000] leading-none">
+                    <p className="font-sora text-[18px] sm:text-[14px] tracking-[-0.02em] text-[#000] leading-none">
                       {card.num}
-                    </h6>
+                    </p>
                     <span className="text-[14px] sm:text-[18px] leading-none font-[family-name:var(--font-sora),sans-serif] text-[#6D6D6D]">
                       {card.unit}
                     </span>
@@ -575,9 +614,9 @@ export default function ScrollFrames() {
                     <div
                       className={`flex items-baseline gap-1 flex-wrap ${i == 3 ? "lg:gap-0.5" : "lg:gap-1.5"}`}
                     >
-                      <h6 className="text-[24px] sm:text-[30px] lg:text-[30px] 2xl:text-[40px] tracking-[-0.02em] text-[#000] leading-none">
+                      <p className="font-sora text-[24px] sm:text-[30px] lg:text-[30px] 2xl:text-[40px] tracking-[-0.02em] text-[#000] leading-none">
                         {card.num}
-                      </h6>
+                      </p>
                       <span
                         className={`text-[14px] sm:text-[18px] ${i == 3 ? "lg:text-[18px] 2xl:text-[20px]" : "lg:text-[20px]"} leading-none font-[family-name:var(--font-sora),sans-serif] text-[#6D6D6D]`}
                       >

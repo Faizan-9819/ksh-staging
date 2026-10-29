@@ -15,11 +15,11 @@ export default function AifGovernancePage() {
     <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       <Hero />
 
-      <main className="flex-1">
+      <div className="flex-1">
         {/* 1. Intro — currently disabled, see components/AifComponents/Governance/Intro.tsx */}
         <InvestmentCommittee />
         {/* <CTA /> */}
-      </main>
+      </div>
     </div>
   );
 }

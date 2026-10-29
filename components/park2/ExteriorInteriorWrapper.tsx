@@ -37,11 +37,13 @@ export default function ExteriorInteriorWrapper({
           <div className="flex w-full items-center gap-[20px] sm:w-[429px]">
             {TABS.map((tab) => (
               <button
+                type="button"
                 key={tab.value}
+                aria-pressed={view === tab.value}
                 onClick={() => setView(tab.value)}
                 className={`flex-1 cursor-pointer whitespace-nowrap rounded-[50px] px-[20px] py-[10px] text-center font-sora text-[16px] leading-[1.4] transition-colors sm:text-[20px] ${
                   view === tab.value
-                    ? "bg-[#59624d] text-white"
+                    ? "bg-[#59624d] text-white underline underline-offset-4"
                     : "border border-[#9e9e9e] bg-transparent text-[#9e9e9e]"
                 }`}
               >

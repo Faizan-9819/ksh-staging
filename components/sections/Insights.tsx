@@ -665,6 +665,8 @@ export default function Insights({
                       href={post.href}
                       onMouseEnter={() => setHovered(k)}
                       onMouseLeave={() => setHovered(-1)}
+                      onFocus={() => setHovered(k)}
+                      onBlur={() => setHovered(-1)}
                       className="block w-full h-full relative rounded-[30px] overflow-hidden cursor-pointer shadow-lg group"
                     >
                       {cardContent}

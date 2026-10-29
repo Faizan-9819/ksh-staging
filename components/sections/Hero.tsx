@@ -322,6 +322,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/ui/Navbar";
 import Btn from "@/components/ui/Btn";
+import HeroVideoToggle from "@/components/ui/HeroVideoToggle";
 
 const TOTAL_SLIDES = 3;
 
@@ -681,7 +682,8 @@ export default function Hero() {
           </AnimatePresence>
 
           {/* CTA Button */}
-          <div className="mt-[16px] min-h-[48px] flex items-center justify-center">
+          <div className="mt-[16px] min-h-[48px] flex items-center justify-center gap-3">
+            <HeroVideoToggle inline />
             <Btn
               label={currentCtaLabel}
               href={currentCtaHref}
@@ -758,6 +760,13 @@ export default function Hero() {
         className="hidden lg:flex absolute inset-x-0 bottom-0 z-[4] w-full h-[45%] items-end justify-between pointer-events-auto"
         onMouseEnter={() => setIsRevealed(true)}
         onMouseLeave={() => setIsRevealed(false)}
+        // Keyboard users get the same reveal when tabbing into its links.
+        onFocus={() => setIsRevealed(true)}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+            setIsRevealed(false);
+          }
+        }}
       >
         {/* Hero content */}
         <motion.div
@@ -797,7 +806,8 @@ export default function Hero() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="mt-[clamp(18px,2vw,28px)]">
+          <div className="mt-[clamp(18px,2vw,28px)] flex items-center gap-4">
+            <HeroVideoToggle inline />
             <Btn
               label={currentCtaLabel}
               href={currentCtaHref}

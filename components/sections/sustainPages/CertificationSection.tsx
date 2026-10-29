@@ -699,7 +699,7 @@ interface ActiveHeadingProps {
 function ActiveHeading({ item, activeIndex, className }: ActiveHeadingProps) {
   return (
     <AnimatePresence mode="wait">
-      <motion.h2
+      <motion.h3
         key={activeIndex}
         initial="initial"
         animate="animate"
@@ -709,7 +709,7 @@ function ActiveHeading({ item, activeIndex, className }: ActiveHeadingProps) {
         className={className}
       >
         {item.title}
-      </motion.h2>
+      </motion.h3>
     </AnimatePresence>
   );
 }

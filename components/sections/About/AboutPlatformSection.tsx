@@ -295,9 +295,9 @@ function AboutPlatformSection() {
 
                     <div className="relative z-10 flex flex-col h-full justify-between">
                       <div className="flex items-baseline gap-1 lg:gap-1 font-inter ">
-                        <h6 className="text-2xl sm:text-[40px] lg:text-[24px]  min-[1300px]:text-[40px]!  font-inter tracking-[-0.8px] text-[#212121] leading-[-0.8px]">
+                        <p className="text-2xl sm:text-[40px] lg:text-[24px]  min-[1300px]:text-[40px]!  font-sora tracking-[-0.8px] text-[#212121] leading-[-0.8px]">
                           {card.num}
-                        </h6>
+                        </p>
                         <span className="text-sm sm:text-lg tracking-[-0.48px] lg:text-[24px] font-inter leading-[1.2] text-[#6D6D6D] group-hover:text-[#212121] transition-colors">
                           {card.unit}
                         </span>
@@ -326,9 +326,9 @@ function AboutPlatformSection() {
 
                     <div className="relative z-10 flex flex-col h-full justify-between">
                       <div className="flex items-baseline gap-1 lg:gap-1 ">
-                        <h6 className="text-2xl lg:text-[24px] min-[1300px]:text-[40px]!  font-inter tracking-[-0.8px] text-[#212121] leading-[1.2]">
+                        <p className="text-2xl lg:text-[24px] min-[1300px]:text-[40px]!  font-sora tracking-[-0.8px] text-[#212121] leading-[1.2]">
                           {card.num}
-                        </h6>
+                        </p>
                         <span className="text-sm sm:text-lg lg:text-[24px] font-inter text-[#6D6D6D] group-hover:text-[#212121] transition-colors">
                           {card.unit}
                         </span>

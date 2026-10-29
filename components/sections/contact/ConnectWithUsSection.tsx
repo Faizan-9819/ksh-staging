@@ -76,6 +76,7 @@ export default function ConnectWithUsSection() {
             <button
               type="button"
               onClick={() => setActiveCity("mumbai")}
+              aria-pressed={activeCity === "mumbai"}
               className="flex-1 sm:flex-none sm:px-8 py-2.5 rounded-[60px] text-sm sm:text-base font-medium transition-all duration-300 cursor-pointer border text-center"
               style={{
                 backgroundColor:
@@ -92,6 +93,7 @@ export default function ConnectWithUsSection() {
             <button
               type="button"
               onClick={() => setActiveCity("pune")}
+              aria-pressed={activeCity === "pune"}
               className="flex-1 sm:flex-none sm:px-8 py-2.5 rounded-[60px] text-sm sm:text-base font-medium transition-all duration-300 cursor-pointer border text-center"
               style={{
                 backgroundColor:

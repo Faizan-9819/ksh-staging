@@ -1,5 +1,6 @@
 "use client";
 
+import { PRESSABLE } from "@/lib/pressable";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Btn from "@/components/ui/Btn";
@@ -95,13 +96,14 @@ export default function OverviewServices() {
                   >
                     {/* Header: Title + Arrow */}
                     <div
+                      {...PRESSABLE}
                       onClick={() => handleServiceSelect(i)}
                       className="flex items-center justify-between gap-4 cursor-pointer py-4"
                     >
                       <span
                         className="font-[family-name:var(--font-sora),sans-serif] text-[15px] sm:text-[16px] font-medium [transition:color_.35s_ease]"
                         style={{
-                          color: on ? "#212121" : "#868686",
+                          color: on ? "#212121" : "#636363",
                         }}
                       >
                         {s.title}
@@ -222,7 +224,10 @@ export default function OverviewServices() {
                     return (
                       <div
                         key={s.title}
+                        {...PRESSABLE}
                         onClick={() => handleServiceSelect(i)}
+                        // Tabbing onto a row previews it, same as hovering.
+                        onFocus={() => setActive(i)}
                         onMouseEnter={() => {
                           if (
                             typeof window !== "undefined" &&
@@ -240,7 +245,7 @@ export default function OverviewServices() {
                         <span
                           className="font-[family-name:var(--font-sora),sans-serif] text-[16px] md:whitespace-nowrap [transition:color_.35s_ease]"
                           style={{
-                            color: on ? "#212121" : "#868686",
+                            color: on ? "#212121" : "#636363",
                           }}
                         >
                           {s.title}

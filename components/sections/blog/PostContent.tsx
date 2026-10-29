@@ -116,17 +116,19 @@ export default function PostContent({ post, section }: PostContentProps) {
       </div>
 
       <div className="fix">
-        <div className="flex md:flex-row flex-col-reverse gap-9 lg:gap-16 py-10 lg:py-16">
-          <div className="h-fit md:sticky md:top-24">
-            <ShareIcons url={url} title={titleText.replace(/<[^>]+>/g, "")} />
-          </div>
-
+        {/* Article first in the DOM so screen readers / Tab read it before
+            the share rail (the rail only moves left visually on md+). */}
+        <div className="flex md:flex-row flex-col gap-9 lg:gap-16 py-10 lg:py-16">
           <div
             className="blog-content flex-1 font-inter text-[16px] leading-[1.75] text-[#434343] space-y-4 [&_img]:rounded-[16px] [&_a]:text-[#59624d] [&_a]:underline"
             dangerouslySetInnerHTML={{
               __html: cleanPostHtml(post.content.rendered),
             }}
           />
+
+          <div className="h-fit md:sticky md:top-24 md:order-first">
+            <ShareIcons url={url} title={titleText.replace(/<[^>]+>/g, "")} />
+          </div>
         </div>
       </div>
 
